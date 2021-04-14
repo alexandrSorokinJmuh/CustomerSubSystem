@@ -28,4 +28,8 @@ public class AddressService {
     public List<Address> getAll() {
         return addressDao.getAll();
     }
+
+    public Address getById(int id) {
+        return addressDao.getById(id);
+    }
 }

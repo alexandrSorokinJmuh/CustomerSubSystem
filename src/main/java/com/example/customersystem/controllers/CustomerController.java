@@ -1,26 +1,34 @@
 package com.example.customersystem.controllers;
 
 import com.example.customersystem.dao.PaidTypeDao;
+import com.example.customersystem.entities.Address;
 import com.example.customersystem.entities.Customer;
 import com.example.customersystem.entities.PaidType;
+import com.example.customersystem.services.AddressService;
 import com.example.customersystem.services.CustomerService;
 import com.example.customersystem.services.PaidTypeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/customer", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CustomerController {
+
     CustomerService customerService;
     PaidTypeService paidTypeService;
+    AddressService addressService;
 
-    public CustomerController(CustomerService customerService, PaidTypeService paidTypeService) {
+    public CustomerController(CustomerService customerService, PaidTypeService paidTypeService, AddressService addressService) {
         this.customerService = customerService;
         this.paidTypeService = paidTypeService;
+        this.addressService = addressService;
     }
 
     @ModelAttribute("allCustomers")
@@ -33,6 +41,12 @@ public class CustomerController {
     public List<PaidType> getPaidTypeAll(){
         List<PaidType> paidTypeList = paidTypeService.getAll();
         return paidTypeList;
+    }
+
+    @ModelAttribute("allAddress")
+    public List<Address> getAddressAll(){
+        List<Address> addressList = addressService.getAll();
+        return addressList;
     }
 
     @GetMapping()
@@ -61,12 +75,25 @@ public class CustomerController {
     @GetMapping("/{customer_id}/edit")
     public String edit(Model model, @PathVariable("customer_id") int id) {
         model.addAttribute("customer", customerService.getById(id));
+
         return "customer/edit";
     }
 
     @PatchMapping("/{customer_id}")
-    public String update(@ModelAttribute("customer") Customer customer, @PathVariable("customer_id") int id) {
-        customerService.update(id, customer);
+    public String update(@ModelAttribute("customer") Customer customer,
+                         @RequestParam(required = false, name = "addressId") String addressId,
+                         @RequestParam(required = false, name = "paidTypeChoose") String[] paidTypes,
+                         @PathVariable("customer_id") int id
+                         ) {
+        System.out.println(Arrays.toString(paidTypes));
+        if (addressId != null && !addressId.isEmpty())
+            customer.setAddress(addressService.getById(Integer.parseInt(addressId)));
+        if (paidTypes != null)
+            customer.setPaidTypes(Arrays.stream(paidTypes)
+                    .map(paidTypeId -> paidTypeService.getById(Integer.parseInt(paidTypeId)))
+                    .collect(Collectors.toList())
+            );
+        customerService.update(customer.getCustomer_id(), customer);
         return "redirect:/customer";
     }
 

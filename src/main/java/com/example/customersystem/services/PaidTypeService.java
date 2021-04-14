@@ -28,4 +28,8 @@ public class PaidTypeService {
     public List<PaidType> getAll() {
         return paidTypeDao.getAll();
     }
+
+    public PaidType getById(int id) {
+        return paidTypeDao.getById(id);
+    }
 }

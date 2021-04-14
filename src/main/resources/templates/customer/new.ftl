@@ -7,24 +7,27 @@
 </head>
 <body>
 
-<form th:method="POST" th:action="@{/customer}" th:object="${customer}">
+
+<form method="POST" action="/customer">
     <label for="email">Enter email: </label>
-    <input type="email" th:field="*{email}" id="email"/>
+    <input type="email" name="email" id="email"/>
+
     <label for="pass">Enter password: </label>
-    <input type="password" th:field="*{pass}" id="pass"/>
+    <input type="password" name="pass" id="pass"/>
 
     <br>
     <label for="firstName">Enter firstName: </label>
-    <input type="text" th:field="*{firstName}" id="firstName"/>
+    <input type="text" name="firstName" id="firstName"/>
     <label for="lastName">Enter lastName: </label>
-    <input type="text" th:field="*{lastName}" id="lastName"/>
+    <input type="text" name="lastName" id="lastName"/>
     <br>
 
     <label for="phone">Enter phone: </label>
-    <input type="text" th:field="*{phone}" id="phone"/>
+    <input type="text" name="phone" id="phone"/>
 
     <input type="submit" value="Create!"/>
 </form>
+
 
 </body>
 </html>

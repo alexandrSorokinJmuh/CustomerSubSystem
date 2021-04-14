@@ -37,16 +37,23 @@ public class CustomerDao {
         Customer original = entityManager.find(Customer.class, id);
         if (original != null) {
             original.setAddress(customer.getAddress());
+            original.setPass(customer.getPass());
 
+            original.setEmail(customer.getEmail());
+            original.setPhone(customer.getPhone());
 
             original.setFirstName(customer.getFirstName());
             original.setLastName(customer.getLastName());
 
 
+            for(PaidType paidType : original.getPaidTypes())
+                paidType.getCustomerList().remove(original);
+
             original.getPaidTypes().clear();
             for (PaidType paidType : customer.getPaidTypes()) {
                 original.getPaidTypes().add(paidType);
-//                paidType.getCustomerList().add(original);
+
+                paidType.getCustomerList().add(original);
             }
 
             entityManager.merge(original);

@@ -5,12 +5,12 @@
     <title>Index</title>
 </head>
 <body>
+<#list allCustomers as customer>
+    <div >
+        <a href="/customer/${customer.customer_id}">${customer.firstName} ${customer.lastName} --- ${customer.email}</a>
 
-<div th:each="customer : ${customerList}">
-    <a th:href="@{/customer/{customer_id}(customer_id=${customer.getCustomer_id()})}" th:text="${customer.getFirstName()}">customer</a>
-
-</div>
-
+    </div>
+</#list>
 <br/>
 <hr/>
 

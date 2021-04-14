@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Show</title>
+</head>
+<body>
+<p th:text="${customer.getCustomer_id()}">VALUE</p>
+<p th:text="${customer.getFirstName()}">VALUE</p>
+<p th:text="${customer.getLastName()}">VALUE</p>
+<p th:text="${customer.getEmail()}">VALUE</p>
+
+<a th:href="@{/customer/{customer_id}/edit(customer_id=${customer.getCustomer_id()})}">Edit</a>
+
+<form th:method="DELETE" th:action="@{/customer/{customer_id}(customer_id=${customer.getCustomer_id()})}">
+    <input type="submit" value="Delete"/>
+</form>
+</body>
+</html>

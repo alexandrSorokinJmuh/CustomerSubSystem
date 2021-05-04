@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -36,8 +37,9 @@ public class CustomerDao {
     public Customer update(int id, Customer customer) {
         Customer original = entityManager.find(Customer.class, id);
         if (original != null) {
+
             original.setAddress(customer.getAddress());
-            original.setPass(customer.getPass());
+            original.setPassword(customer.getPassword());
 
             original.setEmail(customer.getEmail());
             original.setPhone(customer.getPhone());
@@ -52,7 +54,6 @@ public class CustomerDao {
             original.getPaidTypes().clear();
             for (PaidType paidType : customer.getPaidTypes()) {
                 original.getPaidTypes().add(paidType);
-
                 paidType.getCustomerList().add(original);
             }
 
@@ -64,8 +65,19 @@ public class CustomerDao {
 
     public void delete(int id) {
         Customer customer = entityManager.find(Customer.class, id);
+
         if (customer != null) {
+            for(PaidType paidType : customer.getPaidTypes())
+                paidType.getCustomerList().remove(customer);
+            customer.getPaidTypes().clear();
             entityManager.remove(customer);
         }
+    }
+
+    public Optional<Customer> findByEmail(String email) {
+        return entityManager.createQuery("SELECT customer from Customer customer where customer.email = ?1")
+                .setParameter(1, email)
+                .getResultList().stream().findFirst();
+
     }
 }

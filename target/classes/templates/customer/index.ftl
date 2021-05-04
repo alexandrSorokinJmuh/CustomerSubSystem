@@ -1,20 +1,16 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Index</title>
-</head>
-<body>
-<#list allCustomers as customer>
-    <div >
-        <a href="/customer/${customer.customer_id}">${customer.firstName} ${customer.lastName} --- ${customer.email}</a>
+<#import "../base.ftl" as base>
 
-    </div>
-</#list>
-<br/>
-<hr/>
+<@base.body "${title}">
+    <#list allCustomers as customer>
+        <div>
+            <a href="/customer/${customer.customer_id}">${customer.firstName} ${customer.lastName}
+                --- ${customer.email}</a>
 
-<a href="/customer/new">Create new customer</a>
+        </div>
+    </#list>
+    <br/>
+    <hr/>
 
-</body>
-</html>
+    <a href="/customer/new">Create new customer</a>
+
+</@base.body>

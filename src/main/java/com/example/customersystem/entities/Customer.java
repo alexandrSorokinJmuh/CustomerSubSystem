@@ -19,20 +19,28 @@ public class Customer {
     private String lastName;
     @Column(unique = true)
     private String email;
-    private String pass;
+    private String password;
 
     @Column(unique = true)
     private String phone;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Column(name = "status")
+    private Status status;
+
+    @Column(name = "role")
+    private Role role;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
 
     private Address address;
 
-    @ManyToMany(mappedBy = "customerList")
+    @ManyToMany(mappedBy = "customerList", cascade = CascadeType.DETACH)
     @ToString.Exclude
     @JsonIgnore
     private List<PaidType> paidTypes = new ArrayList<>();
+
+
 
     @Override
     public String toString() {
@@ -41,8 +49,10 @@ public class Customer {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", pass='" + pass + '\'' +
+                ", pass='" + password + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';
     }
+
+
 }

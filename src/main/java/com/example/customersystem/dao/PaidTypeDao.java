@@ -53,7 +53,4 @@ public class PaidTypeDao {
         }
     }
 
-//    public void setNewPaidType(){
-//        entityManager.create
-//    }
 }

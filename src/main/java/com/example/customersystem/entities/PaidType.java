@@ -21,10 +21,11 @@ public class PaidType {
 
 
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "customer_paid_type",
             inverseJoinColumns = @JoinColumn(name = "customer_id", table = "customer", referencedColumnName = "customer_id"),
             joinColumns = @JoinColumn(name = "paid_type_id", table = "paid_type",  referencedColumnName = "paid_type_id")
+
     )
     @JsonIgnore
     @ToString.Exclude

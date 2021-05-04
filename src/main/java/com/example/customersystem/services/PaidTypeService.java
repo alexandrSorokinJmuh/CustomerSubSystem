@@ -1,6 +1,7 @@
 package com.example.customersystem.services;
 
 import com.example.customersystem.dao.PaidTypeDao;
+import com.example.customersystem.dto.PaidTypeDto;
 import com.example.customersystem.entities.PaidType;
 import org.springframework.stereotype.Service;
 
@@ -31,5 +32,12 @@ public class PaidTypeService {
 
     public PaidType getById(int id) {
         return paidTypeDao.getById(id);
+    }
+
+    public PaidType updateWithDto(PaidTypeDto paidTypeDto) {
+        PaidType paidType = new PaidType();
+        paidType.setName(paidTypeDto.getName());
+
+        return update(paidTypeDto.getPaidTypeId(), paidType);
     }
 }

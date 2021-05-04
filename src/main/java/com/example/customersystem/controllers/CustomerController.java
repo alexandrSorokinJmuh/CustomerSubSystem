@@ -52,54 +52,60 @@ public class CustomerController {
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("customerList", customerService.getAll());
+        model.addAttribute("title", "Customers");
         return "customer/index";
     }
 
     @GetMapping("/{customer_id}")
     public String show(@PathVariable("customer_id") int id, Model model) {
         model.addAttribute("customer", customerService.getById(id));
+        model.addAttribute("title", "Show customer");
         return "customer/show";
     }
 
     @GetMapping("/new")
-    public String newPerson(@ModelAttribute("customer") Customer customer) {
+    public String newPerson(@ModelAttribute("customer") Customer customer, Model model) {
+        model.addAttribute("title", "Create customer");
         return "customer/new";
     }
 
-    @PostMapping()
-    public String create(@ModelAttribute("customer") Customer customer) {
-        customerService.create(customer);
-        return "redirect:/customer";
-    }
+//    @PostMapping()
+//    public String create(@ModelAttribute("customer") Customer customer) {
+//        customerService.create(customer);
+//        return "redirect:/customer";
+//    }
 
     @GetMapping("/{customer_id}/edit")
     public String edit(Model model, @PathVariable("customer_id") int id) {
         model.addAttribute("customer", customerService.getById(id));
-
+        model.addAttribute("title", "Edit customer");
         return "customer/edit";
     }
 
-    @PatchMapping("/{customer_id}")
-    public String update(@ModelAttribute("customer") Customer customer,
-                         @RequestParam(required = false, name = "addressId") String addressId,
-                         @RequestParam(required = false, name = "paidTypeChoose") String[] paidTypes,
-                         @PathVariable("customer_id") int id
-                         ) {
-        System.out.println(Arrays.toString(paidTypes));
-        if (addressId != null && !addressId.isEmpty())
-            customer.setAddress(addressService.getById(Integer.parseInt(addressId)));
-        if (paidTypes != null)
-            customer.setPaidTypes(Arrays.stream(paidTypes)
-                    .map(paidTypeId -> paidTypeService.getById(Integer.parseInt(paidTypeId)))
-                    .collect(Collectors.toList())
-            );
-        customerService.update(customer.getCustomer_id(), customer);
-        return "redirect:/customer";
-    }
+//    @PutMapping("/{customer_id}")
+//    public String update(@ModelAttribute("customer") Customer customer,
+//                         @RequestParam(required = false, name = "addressId") String addressId,
+//                         @RequestParam(required = false, name = "paidTypeChoose") String[] paidTypes,
+//                         @PathVariable("customer_id") int id
+//                         ) {
+//        System.out.println(Arrays.toString(paidTypes));
+//        if (addressId != null && !addressId.isEmpty())
+//            customer.setAddress(addressService.getById(Integer.parseInt(addressId)));
+//        if (paidTypes != null)
+//            customer.setPaidTypes(Arrays.stream(paidTypes)
+//                    .map(paidTypeId -> paidTypeService.getById(Integer.parseInt(paidTypeId)))
+//                    .collect(Collectors.toList())
+//            );
+//        customerService.update(customer.getCustomer_id(), customer);
+//        return "redirect:/customer";
+//    }
+//
+//    @DeleteMapping("/{customer_id}")
+//    public String delete(@PathVariable("customer_id") int id) {
+//        customerService.delete(id);
+//        return "redirect:/customer";
+//    }
 
-    @DeleteMapping("/{customer_id}")
-    public String delete(@PathVariable("customer_id") int id) {
-        customerService.delete(id);
-        return "redirect:/customer";
-    }
+
+
 }

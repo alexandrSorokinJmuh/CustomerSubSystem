@@ -59,7 +59,8 @@
 
                 </tr>
             </#list>
-        </table>
+
+
 
         <input type="submit" value="Update!"/>
 

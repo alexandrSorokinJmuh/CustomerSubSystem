@@ -1,5 +1,6 @@
 package com.example.customersystem.rest_controllers;
 
+import com.example.customersystem.JwtAuthenticationException;
 import com.example.customersystem.dao.CustomerDao;
 import com.example.customersystem.dto.AuthenticationRequestDto;
 import com.example.customersystem.entities.Customer;
@@ -52,6 +53,22 @@ public class AuthenticationRestController {
         }catch (AuthenticationException e){
             return new ResponseEntity<>("Invalid email or password", HttpStatus.FORBIDDEN);
         }
+    }
+
+    @PostMapping("/getCustomerId")
+    public ResponseEntity<?> getCustomerId(String token){
+        if (jwtTokenProvider.validateToken(token)){
+
+            Customer customer = customerDao.findByEmail(jwtTokenProvider.getUsername(token)).orElseThrow(() ->
+                    new UsernameNotFoundException("User doesn't exists"));
+            Map<Object, Object> responseMap = new HashMap<>();
+            responseMap.put("customer_id", customer.getCustomer_id());
+
+            return ResponseEntity.ok(responseMap);
+        }else {
+            throw new JwtAuthenticationException("JWT token is expired or invalid", HttpStatus.UNAUTHORIZED);
+        }
+
     }
 
     @PostMapping("/logout")

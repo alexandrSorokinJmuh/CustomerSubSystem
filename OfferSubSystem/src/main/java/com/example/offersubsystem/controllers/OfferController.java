@@ -1,9 +1,6 @@
 package com.example.offersubsystem.controllers;
 
-import com.example.offersubsystem.entities.Category;
-import com.example.offersubsystem.entities.Characteristic;
-import com.example.offersubsystem.entities.Offer;
-import com.example.offersubsystem.entities.OfferPaidType;
+import com.example.offersubsystem.entities.*;
 import com.example.offersubsystem.services.CategoryService;
 import com.example.offersubsystem.services.OfferService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,10 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -154,13 +148,26 @@ public class OfferController {
     public String edit(Model model, @PathVariable("offer_id") int id) {
         Offer offer = offerService.getById(id);
         model.addAttribute("offer", offer);
+        model.addAttribute("offerCharacteristics", offer.getOfferCharacteristics().stream()
+                .map(OfferCharacteristics::getCharacteristic)
+                .collect(Collectors.toList())
+        );
+
+        model.addAttribute("offerCharacteristicValues", offer.getOfferCharacteristics().stream()
+                .map(OfferCharacteristics::getCharacteristicValue)
+                .collect(Collectors.toList())
+        );
+
         System.out.println(offer.getPaidTypes());
         model.addAttribute("offerPaidTypes", offer.getPaidTypes().stream()
                 .map(OfferPaidType::getPaidTypeId)
                 .collect(Collectors.toList())
         );
 
+
         model.addAttribute("title", "Edit offer");
         return "offer/edit";
     }
+
+
 }

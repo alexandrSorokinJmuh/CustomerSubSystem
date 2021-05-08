@@ -8,6 +8,7 @@ import com.example.offersubsystem.dto.OfferDto;
 import com.example.offersubsystem.entities.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,18 +60,33 @@ public class OfferService {
                     .map(paidType -> new OfferPaidType(offer1, paidType))
                     .collect(Collectors.toList())
             );
-        if (offerDto.getCharacteristics() != null)
-            offer.setCharacteristics(
-                    Arrays.stream(offerDto.getCharacteristics())
-                            .map(characteristic -> characteristicsDao.getById(characteristic))
-                            .collect(Collectors.toList())
-            );
-        if (offerDto.getCharacteristicValues() != null)
-            offer.setCharacteristicValues(
-                    Arrays.stream(offerDto.getCharacteristicValues())
-                            .map(characteristicValue -> characteristicValuesDao.getById(characteristicValue))
-                            .collect(Collectors.toList())
-            );
+
+
+        if (offerDto.getCharacteristics() != null && offerDto.getCharacteristicValues() != null) {
+            Integer[] characteristicsId = offerDto.getCharacteristics();
+            String[] characteristicsValue = offerDto.getCharacteristicValues();
+            List<OfferCharacteristics> offerCharacteristics = new ArrayList<>();
+            for (int i = 0; i < characteristicsId.length; i++) {
+                Characteristic characteristic = characteristicsDao.getById(characteristicsId[i]);
+
+                CharacteristicValue characteristicValue = characteristicValuesDao.getByName(characteristicsValue[i]);
+
+                if (characteristicValue == null){
+                    characteristicValue = new CharacteristicValue();
+                    characteristicValue.setValue(characteristicsValue[i]);
+                    characteristicValue = characteristicValuesDao.create(characteristicValue);
+                }
+                OfferCharacteristics offerCharacteristic = new OfferCharacteristics();
+                offerCharacteristic.setOffer(offer1);
+                offerCharacteristic.setCharacteristic(characteristic);
+                offerCharacteristic.setCharacteristicValue(characteristicValue);
+
+                offerCharacteristics.add(offerCharacteristic);
+
+
+            }
+            offer.setOfferCharacteristics(offerCharacteristics);
+        }
 
         System.out.println(offer);
         System.out.println(offer.getPaidTypes());

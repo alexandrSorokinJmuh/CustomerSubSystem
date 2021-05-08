@@ -16,14 +16,15 @@
         </div>
         <div>
             <label for="price">Enter price: </label>
-            <input type="number" placeholder="1.0" step="0.01" min="0" value="${string_to_int(offer.price?string["0.00"])}" name="price" id="price"/>
+            <input type="number" placeholder="1.0" step="0.01" min="0"
+                   value="${string_to_int(offer.price?string["0.00"])}" name="price" id="price"/>
         </div>
 
         <table class="table">
             <tr>
                 <th>Selected</th>
                 <th>ID</th>
-                <th>Name of category</th>
+                <th>Name of paid type</th>
             </tr>
 
             <#list allPaidTypes?keys as paidType>
@@ -58,6 +59,25 @@
                 </tr>
             </#list>
         </table>
+
+        <div>
+            <div id="characteristics">
+                <#list offer.offerCharacteristics as offerCharacteristic>
+                    <div class="characteristicHolder">
+                        <label for="characteristic${offerCharacteristic_index}">Characteristics: </label>
+                        <input type="text" class="input_characteristic" id="characteristic${offerCharacteristic_index}"
+                               value="${offerCharacteristic.characteristic.name}"/>
+                        <input type="hidden" name="characteristics" id="characteristic${offerCharacteristic_index}_id"
+                               value="${offerCharacteristic.characteristic.characteristic_id}">
+                        <label for="characteristicValue${offerCharacteristic_index}">Value:</label>
+                        <input type="text" name="characteristicValues"
+                               id="characteristicValue${offerCharacteristic_index}"
+                               value="${offerCharacteristic.characteristicValue.value}"/>
+                    </div>
+                </#list>
+            </div>
+            <button id="addCharacteristic">Add characteristic</button>
+        </div>
         <input type="submit" value="Update!"/>
     </form>
 
@@ -80,8 +100,56 @@
                     $(location).attr('href', url);
                 }
             });
-
-
         });
+
+        $("#addCharacteristic").on("click", function (e) {
+            e.preventDefault()
+
+
+            let characteristicHolders = $(".characteristicHolder");
+            let characteristicHolder_id = characteristicHolders.length
+            let newElement = $('<div class="characteristicHolder">' +
+                '<label for="characteristic' + characteristicHolder_id + '">Characteristics: </label>' +
+                '<input type="text" class="input_characteristic" id="characteristic' + characteristicHolder_id + '" value=""/>' +
+                '<input type="hidden" name="characteristics" id="characteristic' + characteristicHolder_id + '_id">' +
+                '<label for="characteristicValue' + characteristicHolder_id + '">Value:</label>' +
+                '<input type="text" name="characteristicValues" id="characteristicValue' + characteristicHolder_id + '"/>' +
+                '</div>'
+            )
+            console.log(newElement)
+            $("#characteristics").append(newElement)
+
+
+            autoCompleteElement($("#characteristic" + characteristicHolder_id))
+
+
+        })
+
+        function autoCompleteElement(element) {
+            $(element).autocomplete({
+                source: "characteristicsNotInOffer",
+                maxHeight: 400,
+                maxWidth: $('#trackArtist').width,
+                minLength: 1,
+                select: function (event, ui) {
+                    let x = "#"+this.id
+                    $(x).val(ui.item.label)
+                    console.log($(x))
+                    console.log(ui.item)
+                    console.log(ui.item.value)
+
+                    let y = x+"_id"
+                    $(y).val(ui.item.value);
+
+                    console.log()
+                    return false;
+                }
+            })
+        }
+
+        $(".input_characteristic").each(function () {
+            autoCompleteElement(this)
+        });
+
     </script>
 </@base.body>

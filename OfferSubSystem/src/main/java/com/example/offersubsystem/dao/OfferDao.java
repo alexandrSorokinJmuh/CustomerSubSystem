@@ -42,31 +42,10 @@ public class OfferDao {
             original.getPaidTypes().clear();
             original.setPaidTypes(offer.getPaidTypes());
 
+            original.getOfferCharacteristics().clear();
 
-
-            for(Characteristic characteristic : original.getCharacteristics())
-                characteristic.getOffersList().remove(original);
-
-            for(CharacteristicValue values : original.getCharacteristicValues())
-                values.getOffersList().remove(original);
-
-
-            System.out.println("original " + original);
-            System.out.println("original " + original.getPaidTypes());
-            original.getCharacteristics().clear();
-            original.getCharacteristicValues().clear();
-
-
-            for (Characteristic characteristic : offer.getCharacteristics()) {
-                original.getCharacteristics().add(characteristic);
-                characteristic.getOffersList().add(original);
-            }
-
-            for (CharacteristicValue value : offer.getCharacteristicValues()) {
-                original.getCharacteristicValues().add(value);
-                value.getOffersList().add(original);
-            }
-
+            original.setOfferCharacteristics(offer.getOfferCharacteristics());
+            System.out.println(original.getOfferCharacteristics());
             entityManager.merge(original);
 
         }
@@ -77,16 +56,11 @@ public class OfferDao {
         Offer offer = entityManager.find(Offer.class, id);
 
         if (offer != null) {
-            for(Characteristic characteristic : offer.getCharacteristics())
-                characteristic.getOffersList().remove(offer);
 
-            for(CharacteristicValue value : offer.getCharacteristicValues())
-                value.getOffersList().remove(offer);
+            offer.getOfferCharacteristics().clear();
 
             offer.getPaidTypes().clear();
 
-            offer.getCharacteristics().clear();
-            offer.getCharacteristicValues().clear();
             entityManager.remove(offer);
         }
     }

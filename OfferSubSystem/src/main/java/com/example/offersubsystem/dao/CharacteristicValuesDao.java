@@ -3,6 +3,7 @@ package com.example.offersubsystem.dao;
 import com.example.offersubsystem.entities.CharacteristicValue;
 import com.example.offersubsystem.entities.Characteristic;
 import com.example.offersubsystem.entities.Offer;
+import com.example.offersubsystem.entities.OfferCharacteristics;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,24 +37,10 @@ public class CharacteristicValuesDao {
 
             original.setValue(value.getValue());
 
-            for(Offer offer : original.getOffersList())
-                offer.getCharacteristics().remove(original);
+            original.getOfferCharacteristics().clear();
 
-            for(Characteristic characteristic : original.getCharacteristics())
-                characteristic.getCharacteristicValues().remove(original);
+            original.setOfferCharacteristics(value.getOfferCharacteristics());
 
-            original.getOffersList().clear();
-            original.getCharacteristics().clear();
-
-            for (Offer offer : value.getOffersList()) {
-                original.getOffersList().add(offer);
-                offer.getCharacteristicValues().add(original);
-            }
-
-            for (Characteristic characteristic : value.getCharacteristics()) {
-                original.getCharacteristics().add(characteristic);
-                characteristic.getCharacteristicValues().add(original);
-            }
 
             entityManager.merge(original);
 
@@ -65,15 +52,32 @@ public class CharacteristicValuesDao {
         CharacteristicValue value = entityManager.find(CharacteristicValue.class, id);
 
         if (value != null) {
-            for(Offer offer : value.getOffersList())
-                offer.getCharacteristicValues().remove(value);
 
-            for(Characteristic characteristic : value.getCharacteristics())
-                characteristic.getCharacteristicValues().remove(value);
+            value.getOfferCharacteristics().clear();
 
-            value.getOffersList().clear();
-            value.getCharacteristics().clear();
             entityManager.remove(value);
         }
     }
+
+    public CharacteristicValue getByName(String termName) {
+        List<?> resultList = entityManager.createQuery("SELECT characteristicValue from CharacteristicValue characteristicValue where characteristicValue.value = ?1")
+                .setParameter(1, termName)
+                .getResultList();
+        if (resultList.size() == 0)
+            return null;
+        else
+            return (CharacteristicValue) resultList.get(0);
+    }
+
+//    public CharacteristicValue getIfExsist(CharacteristicValue characteristicValue, Characteristic characteristic, Offer offer) {
+////        List<CharacteristicValue> resultList = entityManager.createQuery("from CharacteristicValue where value_id="+characteristicValue.getValue_id()+
+////                "and characteristic_id="+characteristic.getCharacteristic_id()+
+////                "and offer_id"
+////
+////                , CharacteristicValue.class).getResultList();
+//        if (resultList.size() == 0)
+//            return null;
+//        else
+//            return resultList.get(0);
+//    }
 }

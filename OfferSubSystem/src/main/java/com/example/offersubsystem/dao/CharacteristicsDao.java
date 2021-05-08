@@ -36,24 +36,10 @@ public class CharacteristicsDao {
             original.setName(characteristic.getName());
             original.setDescription(characteristic.getDescription());
 
-            for(Offer offer : original.getOffersList())
-                offer.getCharacteristics().remove(original);
 
-            for(CharacteristicValue values : original.getCharacteristicValues())
-                values.getCharacteristics().remove(original);
+            original.getOfferCharacteristics().clear();
 
-            original.getOffersList().clear();
-            original.getCharacteristicValues().clear();
-
-            for (Offer offer : characteristic.getOffersList()) {
-                original.getOffersList().add(offer);
-                offer.getCharacteristics().add(original);
-            }
-
-            for (CharacteristicValue value : characteristic.getCharacteristicValues()) {
-                original.getCharacteristicValues().add(value);
-                value.getCharacteristics().add(original);
-            }
+            original.setOfferCharacteristics(characteristic.getOfferCharacteristics());
 
             entityManager.merge(original);
 
@@ -65,14 +51,9 @@ public class CharacteristicsDao {
         Characteristic characteristic = entityManager.find(Characteristic.class, id);
 
         if (characteristic != null) {
-            for(Offer offer : characteristic.getOffersList())
-                offer.getCharacteristics().remove(characteristic);
 
-            for(CharacteristicValue value : characteristic.getCharacteristicValues())
-                value.getCharacteristics().remove(characteristic);
+            characteristic.getOfferCharacteristics().clear();
 
-            characteristic.getOffersList().clear();
-            characteristic.getCharacteristicValues().clear();
             entityManager.remove(characteristic);
         }
     }

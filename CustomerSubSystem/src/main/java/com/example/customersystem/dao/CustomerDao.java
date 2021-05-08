@@ -25,10 +25,6 @@ public class CustomerDao {
         return entityManager.find(Customer.class, id);
     }
 
-    public Customer getByEmail(String email){
-        return entityManager.find(Customer.class, email);
-    }
-
     public Customer create(Customer customer) {
         entityManager.persist(customer);
         return customer;

@@ -22,20 +22,33 @@ public class Characteristic {
     private String name;
     private String description;
 
-    @ManyToMany(mappedBy = "characteristics", cascade = CascadeType.DETACH)
+    @OneToMany(mappedBy = "linkPk.characteristic", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @JsonIgnore
-    private List<Offer> offersList = new ArrayList<>();
+    private List<OfferCharacteristics> offerCharacteristics = new ArrayList<>();;
 
+    public void setOfferCharacteristics(List<OfferCharacteristics> offerCharacteristics)
+    {
+        this.offerCharacteristics.clear();
+        if (offerCharacteristics != null) {
+            this.offerCharacteristics.addAll(offerCharacteristics);
+        }
+    }
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "offer_characteristics",
-            inverseJoinColumns = @JoinColumn(name = "value_id", table = "characteristic_values", referencedColumnName = "value_id"),
-            joinColumns = @JoinColumn(name = "characteristic_id", table = "characteristics",  referencedColumnName = "characteristic_id")
-
-    )
-    @JsonIgnore
-    @ToString.Exclude
-    List<CharacteristicValue> characteristicValues = new ArrayList<>();
+//    @ManyToMany(mappedBy = "characteristics", cascade = CascadeType.DETACH)
+//    @ToString.Exclude
+//    @JsonIgnore
+//    private List<Offer> offersList = new ArrayList<>();
+//
+//
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "offer_characteristics",
+//            inverseJoinColumns = @JoinColumn(name = "value_id", table = "characteristic_values", referencedColumnName = "value_id"),
+//            joinColumns = @JoinColumn(name = "characteristic_id", table = "characteristics",  referencedColumnName = "characteristic_id")
+//
+//    )
+//    @JsonIgnore
+//    @ToString.Exclude
+//    List<CharacteristicValue> characteristicValues = new ArrayList<>();
 
 }

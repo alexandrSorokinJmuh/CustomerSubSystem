@@ -12,6 +12,6 @@ public class OfferDto {
     Integer category;
     Integer[] paidTypes;
     Integer[] characteristics;
-    Integer[] characteristicValues;
+    String[] characteristicValues;
 
 }

@@ -1,6 +1,7 @@
 package com.example.offersubsystem.rest;
 
 import com.example.offersubsystem.dto.CharacteristicDto;
+import com.example.offersubsystem.dto.LabelAndValueDto;
 import com.example.offersubsystem.dto.OfferDto;
 import com.example.offersubsystem.entities.Characteristic;
 import com.example.offersubsystem.entities.Offer;
@@ -15,9 +16,11 @@ import java.util.List;
 @RequestMapping(value = "/offer", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OfferRestController {
     OfferService offerService;
+    CharacteristicService characteristicService;
 
-    public OfferRestController(OfferService offerService) {
+    public OfferRestController(OfferService offerService, CharacteristicService characteristicService) {
         this.offerService = offerService;
+        this.characteristicService = characteristicService;
     }
 
     @GetMapping("/offers")
@@ -51,5 +54,18 @@ public class OfferRestController {
         Offer offer = offerService.getById(id);
         offerService.delete(id);
         return offer;
+    }
+
+
+
+    @GetMapping("/{offer_id}/characteristicsNotInOffer")
+
+    public List<LabelAndValueDto> showCharacteristicsNotInOfferByTerm(
+            @PathVariable("offer_id") int id,
+            @RequestParam(value = "term", required = false, defaultValue = "") String term) {
+        Offer offer = offerService.getById(id);
+
+        List<LabelAndValueDto> suggestions = characteristicService.getSuggestionsByTerm(characteristicService.getCharacteristicNotInOffer(offer), term);
+        return suggestions;
     }
 }

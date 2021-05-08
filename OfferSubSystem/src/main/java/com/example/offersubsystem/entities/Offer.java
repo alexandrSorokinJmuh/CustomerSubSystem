@@ -37,22 +37,36 @@ public class Offer {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     @ToString.Exclude
+    @JsonIgnore
     private Category category;
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "offer_characteristics",
-            inverseJoinColumns = @JoinColumn(name = "characteristic_id", table = "characteristics", referencedColumnName = "characteristic_id"),
-            joinColumns = @JoinColumn(name = "offer_id", table = "offers",  referencedColumnName = "offer_id")
-
-    )
-    @JsonIgnore
-    @ToString.Exclude
-    private List<Characteristic> characteristics = new ArrayList<>();
-
-
-    @ManyToMany(mappedBy = "offersList", cascade = CascadeType.DETACH)
+    @OneToMany(mappedBy = "linkPk.offer", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @JsonIgnore
-    private List<CharacteristicValue> characteristicValues = new ArrayList<>();
+    private List<OfferCharacteristics> offerCharacteristics = new ArrayList<>();
+
+    public void setOfferCharacteristics(List<OfferCharacteristics> offerCharacteristics)
+    {
+        this.offerCharacteristics.clear();
+        if (offerCharacteristics != null) {
+            this.offerCharacteristics.addAll(offerCharacteristics);
+        }
+    }
+
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "offer_characteristics",
+//            inverseJoinColumns = @JoinColumn(name = "characteristic_id", table = "characteristics", referencedColumnName = "characteristic_id"),
+//            joinColumns = @JoinColumn(name = "offer_id", table = "offers",  referencedColumnName = "offer_id")
+//
+//    )
+//    @JsonIgnore
+//    @ToString.Exclude
+//    private List<Characteristic> characteristics = new ArrayList<>();
+//
+//
+//    @ManyToMany(mappedBy = "offersList", cascade = CascadeType.DETACH)
+//    @ToString.Exclude
+//    @JsonIgnore
+//    private List<CharacteristicValue> characteristicValues = new ArrayList<>();
 }

@@ -139,7 +139,7 @@ public class OfferController {
     }
 
     @GetMapping("/new")
-    public String newPerson(@ModelAttribute("characteristic") Offer offer, Model model) {
+    public String newPerson(@ModelAttribute("offer") Offer offer, Model model) {
         model.addAttribute("title", "Create offer");
         return "offer/new";
     }

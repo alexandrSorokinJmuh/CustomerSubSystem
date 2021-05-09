@@ -129,7 +129,7 @@
             $(element).autocomplete({
                 source: "characteristicsNotInOffer",
                 maxHeight: 400,
-                maxWidth: $('#trackArtist').width,
+                maxWidth: $(this).width,
                 minLength: 1,
                 select: function (event, ui) {
                     let x = "#"+this.id

@@ -100,7 +100,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.example.offersubsystem.Application</mainClass>
+                            <mainClass>com.example.ordersubsystem.Application</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

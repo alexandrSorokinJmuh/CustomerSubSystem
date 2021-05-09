@@ -20,6 +20,7 @@ public class Orders {
     Date deliveryTime;
 
     @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
     private Status status;
     boolean paid;
 }

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -63,5 +64,15 @@ public class OfferDao {
 
             entityManager.remove(offer);
         }
+    }
+
+    public List<Offer> findOffersByPaidTypes(List<Integer> paidTypes) {
+        return entityManager.createQuery("SELECT distinct offers from Offer offers join OfferPaidType offerPaidTypes " +
+                "on offers.offer_id = offerPaidTypes.offer.offer_id " +
+                "where offerPaidTypes.paidTypeId in ?1"
+        )
+                .setParameter(1, paidTypes)
+                .getResultList();
+
     }
 }

@@ -1,5 +1,6 @@
 package com.example.offersubsystem.controllers;
 
+import com.example.offersubsystem.dto.PaidTypeDto;
 import com.example.offersubsystem.entities.*;
 import com.example.offersubsystem.services.CategoryService;
 import com.example.offersubsystem.services.OfferService;
@@ -47,7 +48,7 @@ public class OfferController {
     }
 
     @ModelAttribute("allPaidTypes")
-    public Map<String, String> getPaidTypes(HttpServletRequest request) {
+    public List<PaidTypeDto> getPaidTypes(HttpServletRequest request) {
         // request url
 //        String url = originAddress + "/paid_type";
 //
@@ -98,31 +99,16 @@ public class OfferController {
 //            System.out.println(response.getStatusCode());
 //            return null;
 //        }
-        List<Map<String, String>> responseBody = new ArrayList<>();
-        responseBody.add(new HashMap<>());
-        responseBody.get(0).put("paid_type_id", "4");
-        responseBody.get(0).put("name", "card");
 
-        responseBody.add(new HashMap<>());
-        responseBody.get(1).put("paid_type_id", "5");
-        responseBody.get(1).put("name", "cash");
+        List<PaidTypeDto> responseBody = new ArrayList<>();
+        responseBody.add(new PaidTypeDto("4", "card"));
 
-        responseBody.add(new HashMap<>());
-        responseBody.get(2).put("paid_type_id", "6");
-        responseBody.get(2).put("name", "e-money");
-        System.out.println(responseBody.stream()
-//                .map(paidType -> (LinkedHashMap)paidType)
-                .collect(Collectors.toMap(
-                        (paidType -> Integer.parseInt(paidType.get("paid_type_id").toString())),
-                        (paidType -> paidType.get("name").toString())
-                )));
+        responseBody.add(new PaidTypeDto("5", "cash"));
 
-        return responseBody.stream()
-//                .map(paidType -> (LinkedHashMap)paidType)
-                .collect(Collectors.toMap(
-                        (paidType -> paidType.get("paid_type_id").toString()),
-                        (paidType -> paidType.get("name").toString())
-                ));
+        responseBody.add(new PaidTypeDto("6", "e-money"));
+
+
+        return responseBody;
     }
 
     @GetMapping()

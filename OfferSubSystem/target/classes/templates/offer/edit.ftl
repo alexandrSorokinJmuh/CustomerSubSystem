@@ -27,14 +27,14 @@
                 <th>Name of paid type</th>
             </tr>
 
-            <#list allPaidTypes?keys as paidType>
+            <#list allPaidTypes as paidType>
                 <tr>
                     <td><label>
-                            <input type="checkbox" name="paidTypes" value="${paidType}"
-                                   <#if offerPaidTypes?? && offerPaidTypes?seq_contains(paidType?number)>checked</#if>>
+                            <input type="checkbox" name="paidTypes" value="${paidType.paid_type_id}"
+                                   <#if offerPaidTypes?? && offerPaidTypes?seq_contains(paidType.paid_type_id?number)>checked</#if>>
                         </label></td>
-                    <td>${paidType}</td>
-                    <td>${allPaidTypes[paidType]}</td>
+                    <td>${paidType.paid_type_id}</td>
+                    <td>${paidType.name}</td>
 
                 </tr>
             </#list>
@@ -129,7 +129,7 @@
             $(element).autocomplete({
                 source: "characteristicsNotInOffer",
                 maxHeight: 400,
-                maxWidth: $('#trackArtist').width,
+                maxWidth: $(this).width,
                 minLength: 1,
                 select: function (event, ui) {
                     let x = "#"+this.id

@@ -5,6 +5,7 @@ import com.example.offersubsystem.dao.CharacteristicValuesDao;
 import com.example.offersubsystem.dao.CharacteristicsDao;
 import com.example.offersubsystem.dao.OfferDao;
 import com.example.offersubsystem.dto.OfferDto;
+import com.example.offersubsystem.dto.PaidTypeDto;
 import com.example.offersubsystem.entities.*;
 import org.springframework.stereotype.Service;
 
@@ -91,5 +92,12 @@ public class OfferService {
         System.out.println(offer);
         System.out.println(offer.getPaidTypes());
         return update(offerDto.getOffer_id(), offer);
+    }
+
+    public List<Offer> getOffersByPaidTypes(List<PaidTypeDto> paidTypeDtoList) {
+        return offerDao.findOffersByPaidTypes(paidTypeDtoList.stream()
+                .map(paidTypeDto -> Integer.parseInt(paidTypeDto.getPaid_type_id()))
+                .collect(Collectors.toList())
+        );
     }
 }

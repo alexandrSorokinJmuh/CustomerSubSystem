@@ -7,7 +7,7 @@
     <groupId>org.example</groupId>
     <artifactId>CustomerSystem</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>customerSubSystem</name>
     <url>http://maven.apache.org</url>
 
@@ -54,6 +54,15 @@
             <artifactId>spring-boot-starter-web</artifactId>
 
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <version>2.4.5</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -83,10 +92,13 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <start-class>com.example.customersystem.Application</start-class>
     </properties>
 
 
     <build>
+        <finalName>${project.artifactId}</finalName>
+
 <!--        <defaultGoal>package</defaultGoal>-->
         <plugins>
             <plugin>

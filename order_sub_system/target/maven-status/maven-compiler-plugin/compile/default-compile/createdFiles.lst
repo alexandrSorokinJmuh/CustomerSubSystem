@@ -1,0 +1,10 @@
+com\example\order_sub_system\dto\LabelAndValueDto.class
+com\example\order_sub_system\dto\OrdersDto.class
+com\example\order_sub_system\entities\Status.class
+com\example\order_sub_system\Application.class
+com\example\order_sub_system\rest\OrderRestController.class
+com\example\order_sub_system\orders\OrderService.class
+com\example\order_sub_system\entities\Orders.class
+com\example\order_sub_system\dao\OrderDao.class
+com\example\order_sub_system\dto\OfferDto.class
+com\example\order_sub_system\controllers\OrderController.class

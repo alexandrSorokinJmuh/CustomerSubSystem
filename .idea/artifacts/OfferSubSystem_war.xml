@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="OfferSubSystem:war">
+    <output-path>$PROJECT_DIR$/offer_sub_system/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>OfferSubSystem</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="OfferSubSystem.war">
+      <element id="artifact" artifact-name="OfferSubSystem:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -27,14 +27,14 @@
                 <th>Name of paid type</th>
             </tr>
 
-            <#list allPaidTypes as paidType>
+            <#list allPaidTypes as paidType, value>
                 <tr>
                     <td><label>
-                            <input type="checkbox" name="paidTypes" value="${paidType.paid_type_id}"
-                                   <#if offerPaidTypes?? && offerPaidTypes?seq_contains(paidType.paid_type_id?number)>checked</#if>>
+                            <input type="checkbox" name="paidTypes" value="${value.paid_type_id}"
+                                   <#if offerPaidTypes?? && offerPaidTypes?seq_contains(paidType)>checked</#if>>
                         </label></td>
-                    <td>${paidType.paid_type_id}</td>
-                    <td>${paidType.name}</td>
+                    <td>${paidType}</td>
+                    <td>${value.name}</td>
 
                 </tr>
             </#list>

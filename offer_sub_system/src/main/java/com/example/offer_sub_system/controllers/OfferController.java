@@ -4,7 +4,10 @@ import com.example.offer_sub_system.dto.PaidTypeDto;
 import com.example.offer_sub_system.entities.*;
 import com.example.offer_sub_system.services.CategoryService;
 import com.example.offer_sub_system.services.OfferService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,7 +49,7 @@ public class OfferController {
     }
 
     @ModelAttribute("allPaidTypes")
-    public List<PaidTypeDto> getPaidTypes(HttpServletRequest request) {
+    public Map<Integer, PaidTypeDto> getPaidTypes(HttpServletRequest request) {
         // request url
 //        String url = originAddress + "/paid_type";
 //
@@ -98,12 +101,12 @@ public class OfferController {
 //            return null;
 //        }
 
-        List<PaidTypeDto> responseBody = new ArrayList<>();
-        responseBody.add(new PaidTypeDto("4", "card"));
+        Map<Integer, PaidTypeDto> responseBody = new HashMap<>();
+        responseBody.put(1, new PaidTypeDto("1", "card"));
 
-        responseBody.add(new PaidTypeDto("5", "cash"));
+        responseBody.put(2, new PaidTypeDto("2", "cash"));
 
-        responseBody.add(new PaidTypeDto("6", "e-money"));
+        responseBody.put(3,new PaidTypeDto("3", "e-money"));
 
 
         return responseBody;
@@ -116,8 +119,21 @@ public class OfferController {
     }
 
     @GetMapping("/{offer_id}")
-    public String show(@PathVariable("offer_id") int id, Model model) {
-        model.addAttribute("offer", offerService.getById(id));
+    public String show(@PathVariable("offer_id") int id,
+                       Model model) {
+        Offer offer = offerService.getById(id);
+        model.addAttribute("offer", offer);
+        Map<Integer, PaidTypeDto> paidTypeDtoMap = (Map<Integer, PaidTypeDto>) model.asMap().get("allPaidTypes");
+
+        List<Integer> offerPaidTypeId =offer.getPaidTypes().stream()
+                .map(OfferPaidType::getPaidTypeId)
+                .collect(Collectors.toList());
+        System.out.println(offerPaidTypeId);
+        model.addAttribute("paidTypes", paidTypeDtoMap.entrySet().stream()
+                .filter(entry->offerPaidTypeId.contains(entry.getKey()))
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList())
+        );
         model.addAttribute("title", "Show offer");
         return "offer/show";
     }

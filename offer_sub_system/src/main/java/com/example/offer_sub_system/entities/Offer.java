@@ -36,8 +36,6 @@ public class Offer {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
-    @ToString.Exclude
-    @JsonIgnore
     private Category category;
 
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="CustomerSubSystemDB@localhost" uuid="8c4a0c13-f92d-4f67-b0c7-c66c27930cd3">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/CustomerSubSystemDB</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="OfferSubSystemDB@localhost" uuid="03bb155e-8c2b-4ff1-8160-bc939399688b">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/OfferSubSystemDB</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="OrderSubSystemDB@localhost" uuid="2031185c-864c-4005-a06f-899f7eb79c80">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/OrderSubSystemDB</jdbc-url>
+    </data-source>
+  </component>
+</project>

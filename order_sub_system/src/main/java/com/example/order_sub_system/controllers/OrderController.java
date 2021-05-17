@@ -1,5 +1,6 @@
 package com.example.order_sub_system.controllers;
 
+import com.example.order_sub_system.dto.CustomerDto;
 import com.example.order_sub_system.entities.Orders;
 import com.example.order_sub_system.entities.Status;
 import com.example.order_sub_system.orders.OrderService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
@@ -50,8 +52,18 @@ public class OrderController {
     }
 
     @GetMapping("/{order_id}")
-    public String show(@PathVariable("order_id") int id, Model model) {
+    public String show(
+            HttpServletRequest request,
+            @PathVariable("order_id") int id,
+            Model model) {
         model.addAttribute("order", orderService.getById(id));
+        Orders order = orderService.getById(id);
+        if (order.getCustomer_id() != null){
+            model.addAttribute("customer", orderService.getCustomer(request, order.getCustomer_id().toString()));
+        }
+        if (order.getOffer_id() != null){
+            model.addAttribute("offer", orderService.getOffer(request, order.getOffer_id().toString()));
+        }
         model.addAttribute("title", "Show order");
         return "order/show";
     }
@@ -63,11 +75,18 @@ public class OrderController {
     }
 
     @GetMapping("/{order_id}/edit")
-    public String edit(Model model, @PathVariable("order_id") int id) {
+    public String edit(
+            HttpServletRequest request,
+            @PathVariable("order_id") int id,
+            Model model) {
         Orders order = orderService.getById(id);
         model.addAttribute("order", order);
-
-
+        if (order.getCustomer_id() != null){
+            model.addAttribute("customer", orderService.getCustomer(request, order.getCustomer_id().toString()));
+        }
+        if (order.getOffer_id() != null){
+            model.addAttribute("offer", orderService.getOffer(request, order.getOffer_id().toString()));
+        }
         model.addAttribute("title", "Edit order");
         return "order/edit";
     }

@@ -50,7 +50,7 @@ public class CustomerRestController {
     public Customer updateRest(@PathVariable("customer_id") int id,
                                CustomerDto customerDto
     ) {
-
+        System.out.println("cupdate");
         Customer customer = customerService.updateWithDto(customerDto);
 
         return customer;
@@ -59,6 +59,7 @@ public class CustomerRestController {
 
     @DeleteMapping("/{customer_id}")
     public Customer deleteRest(@PathVariable("customer_id") int id) {
+
         Customer customer = customerService.getById(id);
         customerService.delete(id);
         return customer;

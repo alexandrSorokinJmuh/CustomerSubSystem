@@ -11,7 +11,7 @@
         </div>
         <div>
             <label for="pass">Enter password: </label>
-            <input type="password" value="${customer.getPassword}" name="pass" id="pass"/>
+            <input type="password" value="" name="pass" id="pass"/>
         </div>
         <br>
         <div>

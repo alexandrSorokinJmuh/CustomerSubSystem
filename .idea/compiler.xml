@@ -24,6 +24,7 @@
       <module name="CustomerSubSystem" options="-parameters" />
       <module name="OfferSubSystem" options="-parameters" />
       <module name="OrderSubSystem" options="-parameters" />
+      <module name="SecondLab" options="-parameters" />
     </option>
   </component>
 </project>

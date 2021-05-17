@@ -14,6 +14,10 @@ public class PaidTypeRestController {
 
     PaidTypeService paidTypeService;
 
+    public PaidTypeRestController(PaidTypeService paidTypeService) {
+        this.paidTypeService = paidTypeService;
+    }
+
     @GetMapping("")
     public List<PaidType> getAll() {
         return paidTypeService.getAll();

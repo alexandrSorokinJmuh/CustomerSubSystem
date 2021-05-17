@@ -15,16 +15,18 @@
             <span>Category:</span> ${offer.category.name}
         </p>
     </#if>
-    <#list allPaidTypes?keys as paidType>
-        <div>
-            ${paidType} ${allPaidTypes[paidType]}
-        </div>
-    </#list>
     <#if offer.paidTypes??>
-
         <p>
-            <span>Paid Type: </span> <#list offer.paidTypes as paidType><span>${allPaidTypes[paidType.paidTypeId?string]}</span><#sep>, </#sep></#list>
+            <span>Paid Type: </span> <#list paidTypes as paidType>
+
+                <span>${paidType.name}</span><#sep>, </#sep></#list>
         </p>
+    </#if>
+    <#if offer.offerCharacteristics??>
+        <div>Characteristic:</div>
+        <#list offer.offerCharacteristics as characteristic>
+            <div>${characteristic.characteristic.name}: ${characteristic.characteristicValue.value}</div>
+        </#list>
     </#if>
     <div>
         <a href="/offer">Back</a>
@@ -38,7 +40,7 @@
             <input type="submit" value="Delete"/>
         </form>
         <script>
-            $("#deleteForm").submit(function(e) {
+            $("#deleteForm").submit(function (e) {
 
                 e.preventDefault(); // avoid to execute the actual submit of the form.
 
@@ -49,11 +51,10 @@
                     type: "DELETE",
                     url: url,
                     data: form.serialize(), // serializes the form's elements.
-                    success: function(data)
-                    {
+                    success: function (data) {
                         console.log(data); // show response from the php script.
                         var url = "/offer";
-                        $(location).attr('href',url);
+                        $(location).attr('href', url);
                     }
                 });
 

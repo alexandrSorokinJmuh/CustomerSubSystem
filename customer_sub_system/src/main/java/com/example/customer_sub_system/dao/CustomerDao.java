@@ -35,7 +35,8 @@ public class CustomerDao {
         if (original != null) {
 
             original.setAddress(customer.getAddress());
-            original.setPassword(customer.getPassword());
+            if (customer.getPassword() != null && customer.getPassword().isEmpty())
+                original.setPassword(customer.getPassword());
 
             original.setEmail(customer.getEmail());
             original.setPhone(customer.getPhone());

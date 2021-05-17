@@ -5,8 +5,8 @@
         <label for="email">Enter email: </label>
         <input type="email" name="email" id="email"/>
 
-        <label for="pass">Enter password: </label>
-        <input type="password" name="pass" id="pass"/>
+        <label for="password">Enter password: </label>
+        <input type="password" name="password" id="password"/>
 
         <br>
         <label for="firstName">Enter firstName: </label>

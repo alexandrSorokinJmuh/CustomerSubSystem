@@ -10,17 +10,31 @@
             <label for="name">Enter order name: </label>
             <input type="text" value="${order.name}" name="name" id="name"/>
         </div>
-
-
-        <div class="offer">
-            <label for="input_offer">Offers: </label>
-            <input type="text" id="input_offer"
+        <div class="customer">
+            <label for="input_customer">Customer: </label>
+            <input type="text" id="input_customer"
+                   <#if customer??>value="${customer.email}"</#if>
             >
-            <input type="hidden" name="offer_id" id="offer_id"
-                   <#if order.offer_id??>value="${order.offer_id}"</#if>
+            <input type="hidden" name="customer_id" id="customer_id"
+                   <#if customer??>value="${customer.customer_id}"</#if>
             >
         </div>
 
+        <div class="offer">
+            <label for="input_offer">Offer: </label>
+            <input type="text" id="input_offer"
+                   <#if offer??>value="${offer.name}"</#if>
+            >
+            <input type="hidden" name="offer_id" id="offer_id"
+                   <#if offer??>value="${offer.offer_id}"</#if>
+            >
+        </div>
+        <div class="deliveryTime">
+            <label for="deliveryTime">Delivery Time: </label>
+            <input type="date" id="deliveryTime" name="deliveryTime"
+                   <#if order.deliveryTime??> value="${order.deliveryTime?string["yyyy-MM-dd"]}" </#if>
+            >
+        </div>
 
         <table class="table">
             <tr>
@@ -82,6 +96,18 @@
                     return false;
                 }
             })
+        $("#input_customer").autocomplete({
+            source: "getCustomerByTerm",
+            maxHeight: 400,
+            maxWidth: $(this).width,
+            minLength: 0,
+            select: function (event, ui) {
+                $("#input_customer").val(ui.item.label)
 
+                $("#customer_id").val(ui.item.value);
+
+                return false;
+            }
+        })
     </script>
 </@base.body>

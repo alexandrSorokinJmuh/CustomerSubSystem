@@ -10,11 +10,24 @@
     <p>
         <span>Status:</span> ${order.status}
     </p>
-    <#if order.offer_id??>
+    <#if offer??>
         <p>
-            <span>Offer:</span> ${order.offer_id}
+            <span>Offer:</span> ${offer.name}
         </p>
     </#if>
+
+    <#if customer??>
+        <p>
+            <span>Customer:</span> ${customer.email}
+        </p>
+    </#if>
+
+    <#if order.deliveryTime??>
+        <p>
+            <span>Delivery time:</span> ${order.deliveryTime?string["dd.MM.yyyy"]}
+        </p>
+    </#if>
+
     <p>
         <span>Is paid:</span>
         <#if order.paid?? && order.paid>

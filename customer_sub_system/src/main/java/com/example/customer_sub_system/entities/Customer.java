@@ -49,7 +49,7 @@ public class Customer {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", pass='" + password + '\'' +
+                ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';
     }

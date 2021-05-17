@@ -1,5 +1,6 @@
 package com.example.order_sub_system.rest;
 
+import com.example.order_sub_system.dto.CustomerDto;
 import com.example.order_sub_system.dto.LabelAndValueDto;
 import com.example.order_sub_system.dto.OfferDto;
 import com.example.order_sub_system.dto.OrdersDto;
@@ -11,6 +12,8 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,8 +25,14 @@ public class OrderRestController {
 
     @Value("${http.address}")
     String originAddress;
+    @Value("${http.customer.address}")
+    String customerOriginAddress;
+    @Value("${http.offer.address}")
+    String offerOriginAddress;
+
     @Value("${jwt.header}")
     String jwtHeader;
+    RestTemplate restTemplate = new RestTemplate();
 
     public OrderRestController(OrderService orderService) {
         this.orderService = orderService;
@@ -47,28 +56,89 @@ public class OrderRestController {
         return orders;
     }
 
+
+
     @GetMapping("allOffers")
-    public List<OfferDto> getOffers() {
-        List<OfferDto> offerDtoList = new ArrayList<>();
-        offerDtoList.add(new OfferDto(1, "offer1", 5536.5f, 2
-        ));
-        offerDtoList.add(new OfferDto(4, "Tovar1", 23.24f, 3
-        ));
+    public List<OfferDto> getOffers(HttpServletRequest request) {
+
+        String url = String.format("%s/offer/offers", offerOriginAddress);
+
+        // create an instance of RestTemplate
+
+        // create headers
+        HttpHeaders headers = new HttpHeaders();
+        // set `content-type` header
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        // set `accept` header
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        headers.set(jwtHeader, orderService.getToken(request));
+
+        // build the request
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(headers);
+
+        // send POST request
+        ResponseEntity<Object[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, Object[].class);
 
 
-        return offerDtoList;
+        if (response.getStatusCode() == HttpStatus.OK) {
+            System.out.println(Arrays.toString(response.getBody()));
+
+            System.out.println(response.getBody().getClass());
+            return Arrays.stream(response.getBody())
+                    .map(offer -> (LinkedHashMap) offer)
+                    .map(offer -> orderService.getOfferDtoByLinkedHashMap(offer))
+                    .collect(Collectors.toList());
+
+        }
+
+        return null;
+    }
+
+
+
+    @GetMapping("allCustomers")
+    private List<CustomerDto> getCustomers(HttpServletRequest request) {
+        String url = String.format("%s/customer/customers", customerOriginAddress);
+
+        // create an instance of RestTemplate
+
+        // create headers
+        HttpHeaders headers = new HttpHeaders();
+        // set `content-type` header
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        // set `accept` header
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        headers.set(jwtHeader, orderService.getToken(request));
+        // build the request
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(headers);
+
+        // send POST request
+        ResponseEntity<Object[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, Object[].class);
+
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            System.out.println(Arrays.toString(response.getBody()));
+
+            System.out.println(response.getBody().getClass());
+            return Arrays.stream(response.getBody())
+                    .map(customer -> (LinkedHashMap) customer)
+                    .map(customer -> orderService.getCustomerDtoByLinkedHashMap(customer))
+                    .collect(Collectors.toList());
+
+        }
+
+        return null;
     }
 
     @GetMapping("/{offer_id}/getOfferByTerm")
 
     public List<LabelAndValueDto> getOfferByTerm(
+            HttpServletRequest request,
             @PathVariable("offer_id") int id,
             @RequestParam(value = "term", required = false, defaultValue = "") String term) {
-        List<OfferDto> offerDtoList = new ArrayList<>();
-        offerDtoList.add(new OfferDto(1, "offer1", 5536.5f, 2
-        ));
-        offerDtoList.add(new OfferDto(4, "Tovar1", 23.24f, 3
-        ));
+        List<OfferDto> offerDtoList = getOffers(request);
 
 
         List<LabelAndValueDto> suggestions = offerDtoList.stream()
@@ -77,6 +147,24 @@ public class OrderRestController {
                 .collect(Collectors.toList());
         return suggestions;
     }
+
+
+    @GetMapping("/{offer_id}/getCustomerByTerm")
+
+    public List<LabelAndValueDto> getCustomerByTerm(
+            HttpServletRequest request,
+            @PathVariable("offer_id") int id,
+            @RequestParam(value = "term", required = false, defaultValue = "") String term) {
+        List<CustomerDto> customerDtoList = getCustomers(request);
+
+
+        List<LabelAndValueDto> suggestions = customerDtoList.stream()
+                .filter(customerDto -> customerDto.getEmail().contains(term))
+                .map(customerDto -> new LabelAndValueDto(customerDto.getEmail(), customerDto.getCustomer_id()))
+                .collect(Collectors.toList());
+        return suggestions;
+    }
+
 
     @PutMapping("/{order_id}")
     public Orders updateRest(@PathVariable("order_id") int id,
@@ -131,18 +219,11 @@ public class OrderRestController {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(headers);
 
         // send POST request
-        ResponseEntity<ResponseEntity> response = restTemplate.exchange(url, HttpMethod.GET, entity, ResponseEntity.class);
+        ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.GET, entity, Object.class);
 
         // check response
-        if (response.getStatusCode() == HttpStatus.CREATED) {
-            System.out.println("Request Successful");
-            System.out.println(response.getBody());
-            ResponseEntity<?> responseBody = response.getBody();
-            if (responseBody != null && responseBody.getStatusCode() == HttpStatus.OK) {
-                return ResponseEntity.ok(responseBody.getBody());
-            } else {
-                return ResponseEntity.badRequest().build();
-            }
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return ResponseEntity.ok(response.getBody());
 
         } else {
             System.out.println("Request Failed");
@@ -156,9 +237,17 @@ public class OrderRestController {
     @GetMapping("/createOrderByOfferAndToken")
 
     public ResponseEntity<?> createOrderByOfferAndToken(
-            @RequestParam("offer_id") int offer_id,
-            @RequestParam("token") String token
+            HttpServletRequest request,
+            String offer_id,
+            String token
     ) {
+        if (offer_id == null || offer_id.isEmpty()) {
+            offer_id = request.getParameter("offer_id");
+        }
+        if (token == null || token.isEmpty()) {
+            token = request.getParameter("token");
+        }
+
         // request url
         String url = String.format("%s/createOrderByOfferAndToken", originAddress);
 
@@ -181,27 +270,16 @@ public class OrderRestController {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map, headers);
 
         // send POST request
-        ResponseEntity<ResponseEntity> response = restTemplate.postForEntity(url, entity, ResponseEntity.class);
+        ResponseEntity<Object> response = restTemplate.postForEntity(url, entity, Object.class);
 
-        if (response.getStatusCode() == HttpStatus.CREATED) {
-            System.out.println("Request Successful");
-            System.out.println(response.getBody());
-            ResponseEntity<?> responseBody = response.getBody();
-            if (response.getStatusCode() == HttpStatus.CREATED) {
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return ResponseEntity.ok(response.getBody());
 
-                if (responseBody != null && responseBody.getStatusCode() == HttpStatus.OK) {
-                    return ResponseEntity.ok(responseBody.getBody());
-                } else {
-                    return ResponseEntity.badRequest().build();
-                }
-
-            } else {
-                System.out.println("Request Failed");
-                System.out.println(response.getStatusCode());
-                return ResponseEntity.badRequest().build();
-            }
+        } else {
+            System.out.println("Request Failed");
+            System.out.println(response.getStatusCode());
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().build();
 
     }
 

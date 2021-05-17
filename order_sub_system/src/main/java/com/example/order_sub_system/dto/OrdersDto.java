@@ -13,8 +13,9 @@ public class OrdersDto {
     private Integer offer_id;
     private Integer customer_id;
 
-    String name;
-    Date deliveryTime;
+    private String name;
+    private String deliveryTime;
+
     private String status;
-    boolean paid;
+    private Boolean paid;
 }

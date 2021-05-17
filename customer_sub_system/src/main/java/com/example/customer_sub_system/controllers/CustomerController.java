@@ -1,5 +1,6 @@
 package com.example.customer_sub_system.controllers;
 
+import com.example.customer_sub_system.dao.CustomerDao;
 import com.example.customer_sub_system.entities.Address;
 import com.example.customer_sub_system.entities.Customer;
 import com.example.customer_sub_system.entities.PaidType;

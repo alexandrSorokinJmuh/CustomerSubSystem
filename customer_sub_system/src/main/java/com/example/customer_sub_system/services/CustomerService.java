@@ -8,6 +8,8 @@ import com.example.customer_sub_system.entities.Address;
 import com.example.customer_sub_system.entities.Customer;
 import com.example.customer_sub_system.entities.Role;
 import com.example.customer_sub_system.entities.Status;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -20,14 +22,20 @@ public class CustomerService {
     private final CustomerDao customerDao;
     private final AddressDao addressDao;
     private final PaidTypeDao paidTypeDao;
+    private final PasswordEncoder passwordEncoder;
 
-    public CustomerService(CustomerDao customerDao, AddressDao addressDao, PaidTypeDao paidTypeDao) {
+    public CustomerService(CustomerDao customerDao, AddressDao addressDao, PaidTypeDao paidTypeDao, PasswordEncoder passwordEncoder) {
         this.customerDao = customerDao;
         this.addressDao = addressDao;
         this.paidTypeDao = paidTypeDao;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Customer create(Customer customer){
+        System.out.println(customer);
+        customer.setRole(Role.USER);
+        customer.setStatus(Status.ACTIVE);
+        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         return customerDao.create(customer);
     }
 
@@ -83,13 +91,16 @@ public class CustomerService {
 
     public Customer updateWithDto(CustomerDto customerDto) {
         Customer customer = new Customer();
-
         customer.setEmail(customerDto.getEmail());
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
         customer.setPhone(customerDto.getPhone());
-        customer.setPassword(customerDto.getPass());
+        if (customerDto.getPass() != null && !customerDto.getPass().isEmpty()) {
 
+            customer.setPassword(passwordEncoder.encode(customerDto.getPass()));
+        }else {
+
+        }
         if (customerDto.getAddressId() != null && !customerDto.getAddressId().isEmpty())
             customer.setAddress(addressDao.getById(Integer.parseInt(customerDto.getAddressId())));
         if (customerDto.getPaidTypesId() != null)

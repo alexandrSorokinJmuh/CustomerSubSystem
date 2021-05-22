@@ -38,7 +38,7 @@ public class AuthenticationRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequestDto requestDto){
+    public ResponseEntity<?> authenticate(AuthenticationRequestDto requestDto){
         try{
 
             String email = requestDto.getEmail();

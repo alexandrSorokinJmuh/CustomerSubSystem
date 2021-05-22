@@ -2,15 +2,18 @@
 
 <@base.body "${title}">
     <form id="addForm" method="POST" action="/characteristic">
-        <div>
+        <div class="form-control">
             <label for="name">Enter name: </label>
             <input type="text" name="name" id="name"/>
         </div>
-        <div>
+        <div class="form-control">
             <label for="description">Enter description: </label>
             <input type="text" name="description" id="description"/>
         </div>
-        <input type="submit" value="Create!"/>
+        <div class="d-flex flex-row">
+            <input class="btn btn-success" type="submit" value="Create!"/>
+            <a class="btn btn-light" href="/characteristic">Back</a>
+        </div>
     </form>
     <script>
         $("#addForm").submit(function (e) {

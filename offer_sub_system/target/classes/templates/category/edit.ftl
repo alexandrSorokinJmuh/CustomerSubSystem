@@ -2,18 +2,21 @@
 
 <@base.body "${title}">
     <form id="editForm" method="post" action="/category/${category.category_id}">
-<!--    <form id="editForm" method="post">-->
+        <!--    <form id="editForm" method="post">-->
         <input type="hidden" name="_method" value="put">
         <input type="hidden" value="${category.category_id}" name="category_id"/>
-        <div>
+        <div class="form-control">
             <label for="name">Enter category name: </label>
             <input type="text" value="${category.name}" name="name" id="name"/>
         </div>
-        <input type="submit" value="Update!"/>
+        <div class="d-flex flex-row">
+            <input class="btn btn-primary" type="submit" value="Update!"/>
+            <a class="btn btn-light" href="/category">Back</a>
+        </div>
     </form>
 
     <script>
-        $("#editForm").on("submit", function(e) {
+        $("#editForm").on("submit", function (e) {
 
             e.preventDefault(); // avoid to execute the actual submit of the form.
 
@@ -24,12 +27,11 @@
                 type: "PUT",
                 url: url,
                 data: form.serialize(), // serializes the form's elements.
-                success: function(data)
-                {
+                success: function (data) {
 
                     console.log(data); // show response from the php script.
                     var url = "/category/" + data["category_id"];
-                    $(location).attr('href',url);
+                    $(location).attr('href', url);
                 }
             });
 

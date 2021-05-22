@@ -10,18 +10,18 @@
         <!--    <form id="editForm" method="post">-->
         <input type="hidden" name="_method" value="put">
         <input type="hidden" value="${offer.offer_id}" name="offer_id"/>
-        <div>
+        <div class="form-control">
             <label for="name">Enter offer name: </label>
             <input type="text" value="${offer.name}" name="name" id="name"/>
         </div>
-        <div>
+        <div class="form-control">
             <label for="price">Enter price: </label>
             <input type="number" placeholder="1.0" step="0.01" min="0"
                    value="${string_to_int(offer.price?string["0.00"])}" name="price" id="price"/>
         </div>
 
         <table class="table">
-            <tr>
+            <tr class="table-success">
                 <th>Selected</th>
                 <th>ID</th>
                 <th>Name of paid type</th>
@@ -41,7 +41,7 @@
         </table>
 
         <table class="table">
-            <tr>
+            <tr class="table-info">
                 <th>Selected</th>
                 <th>ID</th>
                 <th>Name of category</th>
@@ -60,10 +60,10 @@
             </#list>
         </table>
 
-        <div>
+        <div class="form-control">
             <div id="characteristics">
                 <#list offer.offerCharacteristics as offerCharacteristic>
-                    <div class="characteristicHolder">
+                    <div class="characteristicHolder" id="characteristicHolder${offerCharacteristic_index}">
                         <label for="characteristic${offerCharacteristic_index}">Characteristics: </label>
                         <input type="text" class="input_characteristic" id="characteristic${offerCharacteristic_index}"
                                value="${offerCharacteristic.characteristic.name}"/>
@@ -73,12 +73,20 @@
                         <input type="text" name="characteristicValues"
                                id="characteristicValue${offerCharacteristic_index}"
                                value="${offerCharacteristic.characteristicValue.value}"/>
+<#--                        <button id="characteristicRemove${offerCharacteristic_index}"-->
+<#--                                data-remove="${offerCharacteristic_index}"-->
+<#--                        >-->
+<#--                            Убрать</button>-->
                     </div>
                 </#list>
             </div>
-            <button id="addCharacteristic">Add characteristic</button>
+            <button class="btn btn-info" id="addCharacteristic">Add characteristic</button>
         </div>
-        <input type="submit" value="Update!"/>
+
+        <div class="d-flex flex-row">
+            <input class="btn btn-primary" type="submit" value="Update!"/>
+            <a class="btn btn-light" href="/offer">Back</a>
+        </div>
     </form>
 
     <script>
@@ -108,12 +116,13 @@
 
             let characteristicHolders = $(".characteristicHolder");
             let characteristicHolder_id = characteristicHolders.length
-            let newElement = $('<div class="characteristicHolder">' +
+            let newElement = $('<div class="characteristicHolder" id="characteristicHolder'+ characteristicHolder_id +'">' +
                 '<label for="characteristic' + characteristicHolder_id + '">Characteristics: </label>' +
                 '<input type="text" class="input_characteristic" id="characteristic' + characteristicHolder_id + '" value=""/>' +
                 '<input type="hidden" name="characteristics" id="characteristic' + characteristicHolder_id + '_id">' +
                 '<label for="characteristicValue' + characteristicHolder_id + '">Value:</label>' +
                 '<input type="text" name="characteristicValues" id="characteristicValue' + characteristicHolder_id + '"/>' +
+                // '<button id="characteristicRemove'+characteristicHolder_id+'" data-remove="'+characteristicHolder_id+'">'+
                 '</div>'
             )
             console.log(newElement)
@@ -124,12 +133,15 @@
 
 
         })
-
+        function removeChar(element) {
+            element.preventDefault()
+        }
         function autoCompleteElement(element) {
             $(element).autocomplete({
                 source: "characteristicsNotInOffer",
                 maxHeight: 400,
                 maxWidth: $(this).width,
+
                 minLength: 1,
                 select: function (event, ui) {
                     let x = "#"+this.id

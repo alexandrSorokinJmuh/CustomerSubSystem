@@ -2,7 +2,6 @@ G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\e
 G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\rest_controllers\AuthenticationRestController.java
 G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\rest_controllers\CustomerRestController.java
 G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\controllers\AuthController.java
-G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\controllers\GreetingController.java
 G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\security\SecurityUser.java
 G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\security\JwtTokenFilter.java
 G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\dao\CustomerDao.java
@@ -22,6 +21,7 @@ G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\e
 G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\controllers\CustomerController.java
 G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\dto\AuthenticationRequestDto.java
 G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\entities\Role.java
+G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\controllers\MainController.java
 G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\dao\PaidTypeDao.java
 G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\security\UserDetailsServiceImpl.java
 G:\CustomerSubsystem\SecondLab\SecondLab\customer_sub_system\src\main\java\com\example\customer_sub_system\Application.java

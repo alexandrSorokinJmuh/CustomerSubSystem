@@ -3,6 +3,7 @@ com\example\customer_sub_system\services\AddressService.class
 com\example\customer_sub_system\security\JwtConfigurer.class
 com\example\customer_sub_system\config\SecurityConfig.class
 com\example\customer_sub_system\entities\PaidType.class
+com\example\customer_sub_system\controllers\MainController.class
 com\example\customer_sub_system\entities\Role.class
 com\example\customer_sub_system\JwtAuthenticationException.class
 com\example\customer_sub_system\dto\CustomerDto.class
@@ -28,4 +29,3 @@ com\example\customer_sub_system\entities\Address.class
 com\example\customer_sub_system\entities\Status.class
 com\example\customer_sub_system\rest_controllers\CustomerRestController.class
 com\example\customer_sub_system\services\PaidTypeService.class
-com\example\customer_sub_system\controllers\GreetingController.class

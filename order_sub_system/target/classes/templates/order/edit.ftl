@@ -6,11 +6,11 @@
         <!--    <form id="editForm" method="post">-->
         <input type="hidden" name="_method" value="put">
         <input type="hidden" value="${order.order_id}" name="order_id"/>
-        <div>
+        <div class="form-control">
             <label for="name">Enter order name: </label>
             <input type="text" value="${order.name}" name="name" id="name"/>
         </div>
-        <div class="customer">
+        <div class="customer form-control">
             <label for="input_customer">Customer: </label>
             <input type="text" id="input_customer"
                    <#if customer??>value="${customer.email}"</#if>
@@ -20,7 +20,7 @@
             >
         </div>
 
-        <div class="offer">
+        <div class="offer form-control">
             <label for="input_offer">Offer: </label>
             <input type="text" id="input_offer"
                    <#if offer??>value="${offer.name}"</#if>
@@ -29,15 +29,15 @@
                    <#if offer??>value="${offer.offer_id}"</#if>
             >
         </div>
-        <div class="deliveryTime">
+        <div class="deliveryTime form-control">
             <label for="deliveryTime">Delivery Time: </label>
             <input type="date" id="deliveryTime" name="deliveryTime"
-                   <#if order.deliveryTime??> value="${order.deliveryTime?string["yyyy-MM-dd"]}" </#if>
+                    <#if order.deliveryTime??> value="${order.deliveryTime?string["yyyy-MM-dd"]}" </#if>
             >
         </div>
 
         <table class="table">
-            <tr>
+            <tr class="table-warning">
                 <th>Selected</th>
                 <th>Name of status</th>
             </tr>
@@ -53,13 +53,15 @@
                 </tr>
             </#list>
         </table>
-        <div>
+        <div class="form-control">
             <label for="paid">Is paid: </label>
             <input type="checkbox" name="paid" id="paid"
                     <#if order.paid?? && order.paid> checked </#if>>
         </div>
-
-        <input type="submit" value="Update!"/>
+        <div class="d-flex flex-row">
+            <input type="submit" value="Update!"/>
+            <a class="btn btn-light" href="/order">Back</a>
+        </div>
     </form>
 
     <script>
@@ -84,18 +86,18 @@
         });
 
         $("#input_offer").autocomplete({
-                source: "getOfferByTerm",
-                maxHeight: 400,
-                maxWidth: $(this).width,
-                minLength: 0,
-                select: function (event, ui) {
-                    $("#input_offer").val(ui.item.label)
+            source: "getOfferByTerm",
+            maxHeight: 400,
+            maxWidth: $(this).width,
+            minLength: 0,
+            select: function (event, ui) {
+                $("#input_offer").val(ui.item.label)
 
-                    $("#offer_id").val(ui.item.value);
+                $("#offer_id").val(ui.item.value);
 
-                    return false;
-                }
-            })
+                return false;
+            }
+        })
         $("#input_customer").autocomplete({
             source: "getCustomerByTerm",
             maxHeight: 400,

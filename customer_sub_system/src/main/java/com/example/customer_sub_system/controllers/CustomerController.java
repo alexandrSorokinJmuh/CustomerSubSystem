@@ -7,6 +7,8 @@ import com.example.customer_sub_system.entities.PaidType;
 import com.example.customer_sub_system.services.AddressService;
 import com.example.customer_sub_system.services.CustomerService;
 import com.example.customer_sub_system.services.PaidTypeService;
+import freemarker.ext.servlet.HttpSessionHashModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

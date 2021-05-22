@@ -50,7 +50,6 @@ public class CustomerRestController {
     public Customer updateRest(@PathVariable("customer_id") int id,
                                CustomerDto customerDto
     ) {
-        System.out.println("cupdate");
         Customer customer = customerService.updateWithDto(customerDto);
 
         return customer;

@@ -1,11 +1,15 @@
 package com.example.offer_sub_system.dao;
 
 import com.example.offer_sub_system.entities.Characteristic;
+import com.example.offer_sub_system.entities.CharacteristicValue;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Repository
@@ -15,7 +19,7 @@ public class CharacteristicsDao {
     private EntityManager entityManager;
 
     public List<Characteristic> getAll() {
-        return entityManager.createQuery("from Characteristic", Characteristic.class).getResultList();
+        return entityManager.createQuery("SELECT characteristic from Characteristic characteristic", Characteristic.class).getResultList();
     }
 
     public Characteristic getById(int id) {
@@ -54,5 +58,22 @@ public class CharacteristicsDao {
 
             entityManager.remove(characteristic);
         }
+    }
+
+    public List<Characteristic> getCharacteristicNotLike(List<Integer> characteristics, String term) {
+        List<?> resultList;
+        if (characteristics.size() > 0) {
+            resultList = entityManager.createQuery("SELECT characteristic from Characteristic characteristic " +
+                    "where characteristic.characteristic_id not in ?1 and characteristic.name like ?2")
+                    .setParameter(1, characteristics)
+                    .setParameter(2, "%" + term + "%")
+                    .getResultList();
+        }else{
+             resultList = entityManager.createQuery("SELECT characteristic from Characteristic characteristic " +
+                    "where characteristic.name like ?1")
+                    .setParameter(1, "%"+term+"%")
+                    .getResultList();
+        }
+        return (List<Characteristic>) resultList;
     }
 }

@@ -141,10 +141,10 @@ public class OfferRestController {
 
     public List<LabelAndValueDto> showCharacteristicsNotInOfferByTerm(
             @PathVariable("offer_id") int id,
-            @RequestParam(value = "term", required = false, defaultValue = "") String term) {
+            @RequestParam(value = "term", required = false, defaultValue = "") String term,
+            @RequestParam(value = "characteristics", required = false) String[] characteristics) {
         Offer offer = offerService.getById(id);
-
-        List<LabelAndValueDto> suggestions = characteristicService.getSuggestionsByTerm(characteristicService.getCharacteristicNotInOffer(offer), term);
+        List<LabelAndValueDto> suggestions = characteristicService.getLabelAndValue(characteristicService.getCharacteristicNotLike(characteristics, term));
         return suggestions;
     }
 

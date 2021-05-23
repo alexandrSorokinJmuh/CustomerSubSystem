@@ -59,7 +59,7 @@
                     <#if order.paid?? && order.paid> checked </#if>>
         </div>
         <div class="d-flex flex-row">
-            <input type="submit" value="Update!"/>
+            <input class="btn btn-primary" type="submit" value="Update!"/>
             <a class="btn btn-light" href="/order">Back</a>
         </div>
     </form>

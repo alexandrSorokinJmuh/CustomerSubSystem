@@ -82,6 +82,7 @@ public class OrderService {
         // build the request
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(headers);
 
+        System.out.println(getToken(request));
         // send POST request
         ResponseEntity<LinkedHashMap> response = restTemplate.exchange(url, HttpMethod.GET, entity, LinkedHashMap.class);
 

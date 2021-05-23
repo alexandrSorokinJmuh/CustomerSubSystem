@@ -7,6 +7,8 @@ import com.example.offer_sub_system.entities.Characteristic;
 import com.example.offer_sub_system.entities.Offer;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,6 +62,17 @@ public class CharacteristicService {
     public List<LabelAndValueDto> getSuggestionsByTerm(List<Characteristic> characteristicNotInOffer, String term) {
         return characteristicNotInOffer.stream()
                 .filter(characteristic -> characteristic.getName().contains(term))
+                .map(characteristic -> new LabelAndValueDto(characteristic.getName(), characteristic.getCharacteristic_id().toString()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Characteristic> getCharacteristicNotLike(String[] characteristics, String term) {
+        return characteristicsDao.getCharacteristicNotLike(Arrays.stream(characteristics)
+                .map(v -> Integer.parseInt(v)).collect(Collectors.toList()), term);
+    }
+
+    public List<LabelAndValueDto> getLabelAndValue(List<Characteristic> characteristics) {
+        return characteristics.stream()
                 .map(characteristic -> new LabelAndValueDto(characteristic.getName(), characteristic.getCharacteristic_id().toString()))
                 .collect(Collectors.toList());
     }

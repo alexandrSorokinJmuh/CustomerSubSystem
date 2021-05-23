@@ -63,7 +63,7 @@
         <div class="form-control">
             <div id="characteristics">
                 <#list offer.offerCharacteristics as offerCharacteristic>
-                    <div class="characteristicHolder" id="characteristicHolder${offerCharacteristic_index}">
+                    <div class="characteristicHolder" data-index="${offerCharacteristic_index}" id="characteristicHolder${offerCharacteristic_index}">
                         <label for="characteristic${offerCharacteristic_index}">Characteristics: </label>
                         <input type="text" class="input_characteristic" id="characteristic${offerCharacteristic_index}"
                                value="${offerCharacteristic.characteristic.name}"/>
@@ -73,10 +73,10 @@
                         <input type="text" name="characteristicValues"
                                id="characteristicValue${offerCharacteristic_index}"
                                value="${offerCharacteristic.characteristicValue.value}"/>
-<#--                        <button id="characteristicRemove${offerCharacteristic_index}"-->
-<#--                                data-remove="${offerCharacteristic_index}"-->
-<#--                        >-->
-<#--                            Убрать</button>-->
+                        <button class="characteristicRemove" id="characteristicRemove${offerCharacteristic_index}"
+                                data-remove="${offerCharacteristic_index}"
+                        >
+                            Убрать</button>
                     </div>
                 </#list>
             </div>
@@ -115,33 +115,63 @@
 
 
             let characteristicHolders = $(".characteristicHolder");
-            let characteristicHolder_id = characteristicHolders.length
-            let newElement = $('<div class="characteristicHolder" id="characteristicHolder'+ characteristicHolder_id +'">' +
+            let characteristicHolder_id = 0
+            if (characteristicHolders.length > 0){
+                characteristicHolder_id = parseInt(characteristicHolders.last().attr("data-index")) + 1
+            }
+
+            let newElement = $('<div class="characteristicHolder" data-index="'+characteristicHolder_id+'" id="characteristicHolder'+ characteristicHolder_id +'">' +
                 '<label for="characteristic' + characteristicHolder_id + '">Characteristics: </label>' +
                 '<input type="text" class="input_characteristic" id="characteristic' + characteristicHolder_id + '" value=""/>' +
                 '<input type="hidden" name="characteristics" id="characteristic' + characteristicHolder_id + '_id">' +
                 '<label for="characteristicValue' + characteristicHolder_id + '">Value:</label>' +
                 '<input type="text" name="characteristicValues" id="characteristicValue' + characteristicHolder_id + '"/>' +
-                // '<button id="characteristicRemove'+characteristicHolder_id+'" data-remove="'+characteristicHolder_id+'">'+
+                '<button class="characteristicRemove" id="characteristicRemove' + characteristicHolder_id + '" data-remove="' +
+                characteristicHolder_id + '" > Убрать</button>' +
                 '</div>'
             )
             console.log(newElement)
             $("#characteristics").append(newElement)
-
-
             autoCompleteElement($("#characteristic" + characteristicHolder_id))
+            removeChar($("#characteristicRemove" + characteristicHolder_id))
+
+
 
 
         })
         function removeChar(element) {
-            element.preventDefault()
+            console.log(element)
+            $(element).click(function (event) {
+                event.preventDefault()
+                let removeId = $(element).attr("data-remove")
+
+                $("#characteristicHolder" + removeId).remove()
+            })
         }
         function autoCompleteElement(element) {
             $(element).autocomplete({
-                source: "characteristicsNotInOffer",
+                source: function( request, response ) {
+                    $.ajax({
+                        url: "characteristicsNotInOffer",
+                        type: 'get',
+                        dataType: "json",
+                        data: {
+                            "term": request.term,
+                            "characteristics": $.map( $('input[name~="characteristics"]'), function( val, i ) {
+                                let v = $(val).val()
+                                console.log(val)
+                                console.log(v)
+                                if(v !== "")
+                                    return $(val).val()
+                            }).join(", ")
+                        },
+                        success: function( data ) {
+                            response( data );
+                        }
+                    });
+                },
                 maxHeight: 400,
                 maxWidth: $(this).width,
-
                 minLength: 1,
                 select: function (event, ui) {
                     let x = "#"+this.id
@@ -158,7 +188,9 @@
                 }
             })
         }
-
+        $(".characteristicRemove").each(function () {
+            removeChar(this)
+        });
         $(".input_characteristic").each(function () {
             autoCompleteElement(this)
         });

@@ -24,9 +24,9 @@
             </p>
         </#if>
         <#if offer.offerCharacteristics??>
-            <div class="text-body">Characteristic:</div>
+            <div class="text-body">Characteristics:</div>
             <#list offer.offerCharacteristics as characteristic>
-                <div>${characteristic.characteristic.name}: ${characteristic.characteristicValue.value}</div>
+                <div class="ps-3"><span class="text-dark">${characteristic.characteristic.name}:</span> ${characteristic.characteristicValue.value}</div>
             </#list>
         </#if>
         <div>

@@ -73,7 +73,7 @@
                         <input type="text" name="characteristicValues"
                                id="characteristicValue${offerCharacteristic_index}"
                                value="${offerCharacteristic.characteristicValue.value}"/>
-                        <button class="characteristicRemove" id="characteristicRemove${offerCharacteristic_index}"
+                        <button class="characteristicRemove btn btn-light" id="characteristicRemove${offerCharacteristic_index}"
                                 data-remove="${offerCharacteristic_index}"
                         >
                             Убрать</button>
@@ -126,7 +126,7 @@
                 '<input type="hidden" name="characteristics" id="characteristic' + characteristicHolder_id + '_id">' +
                 '<label for="characteristicValue' + characteristicHolder_id + '">Value:</label>' +
                 '<input type="text" name="characteristicValues" id="characteristicValue' + characteristicHolder_id + '"/>' +
-                '<button class="characteristicRemove" id="characteristicRemove' + characteristicHolder_id + '" data-remove="' +
+                '<button class="characteristicRemove btn btn-light" id="characteristicRemove' + characteristicHolder_id + '" data-remove="' +
                 characteristicHolder_id + '" > Убрать</button>' +
                 '</div>'
             )

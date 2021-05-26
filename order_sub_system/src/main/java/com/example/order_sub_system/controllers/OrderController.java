@@ -1,8 +1,9 @@
 package com.example.order_sub_system.controllers;
 
+import com.example.order_sub_system.dto.CustomerDto;
 import com.example.order_sub_system.entities.Orders;
 import com.example.order_sub_system.entities.Status;
-import com.example.order_sub_system.services.OrderService;
+import com.example.order_sub_system.orders.OrderService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;

@@ -34,11 +34,6 @@ public class CustomerRestController {
         return customerService.getById(id);
     }
 
-    @GetMapping("/customers/getByEmail")
-    public Customer indexRest(String email) {
-
-        return customerService.getByEmail(email);
-    }
 
     @GetMapping("/customers/{customer_id}/paidTypes")
     public List<PaidType> showPaidTypes(@PathVariable("customer_id") int id) {

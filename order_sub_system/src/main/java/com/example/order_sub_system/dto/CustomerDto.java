@@ -10,8 +10,5 @@ import lombok.NoArgsConstructor;
 public class CustomerDto {
     String customer_id;
     String email;
-    String password;
-    String status;
-    String role;
 
 }

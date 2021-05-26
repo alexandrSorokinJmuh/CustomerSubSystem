@@ -1,15 +1,17 @@
-package com.example.order_sub_system.orders;
+package com.example.order_sub_system.services;
 
 import com.example.order_sub_system.dao.OrderDao;
+import com.example.order_sub_system.dto.AuthenticationRequestDto;
 import com.example.order_sub_system.dto.CustomerDto;
 import com.example.order_sub_system.dto.OfferDto;
 import com.example.order_sub_system.dto.OrdersDto;
 import com.example.order_sub_system.entities.Orders;
 import com.example.order_sub_system.entities.Status;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.Cookie;
@@ -17,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -45,12 +46,12 @@ public class OrderService {
         return orderDao.getById(id);
     }
 
-    public Orders create(Orders order){
+    public Orders create(Orders order) {
 
         return orderDao.create(order);
     }
 
-    public Orders update(int id, Orders order){
+    public Orders update(int id, Orders order) {
         return orderDao.update(id, order);
     }
 
@@ -66,6 +67,7 @@ public class OrderService {
         }
         return token;
     }
+
     public CustomerDto getCustomer(HttpServletRequest request, String customerId) {
         String url = String.format("%s/customer/customers/%s", customerOriginAddress, customerId);
 
@@ -98,7 +100,80 @@ public class OrderService {
         return null;
     }
 
-    public void delete(int id){
+    public CustomerDto getCustomerByEmail(String email) {
+        String url = String.format("%s/customer/customers/getByEmail", customerOriginAddress);
+        HttpHeaders headers = new HttpHeaders();
+        // set `content-type` header
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        // set `accept` header
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        // build the request
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("email", email);
+
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map, headers);
+
+        // send POST request
+        ResponseEntity<LinkedHashMap> response = restTemplate.exchange(url, HttpMethod.GET, entity, LinkedHashMap.class);
+
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+
+            return getCustomerDtoByLinkedHashMap(response.getBody());
+
+        }
+
+        return null;
+    }
+
+
+    public String getAuthToken(AuthenticationRequestDto authenticationRequestDto) {
+        String url = String.format("%s/api/auth/login", customerOriginAddress);
+
+        // create an instance of RestTemplate
+
+        // create headers
+        HttpHeaders headers = new HttpHeaders();
+        // set `content-type` header
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        // set `accept` header
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+//        String str = "{\"email\"=\""+authenticationRequestDto.getEmail()+"\",\"password\"=\""+authenticationRequestDto.getPassword()+"\"}";
+
+//        headers.set("requestDto", str);
+
+        // build the request
+        Map<String, Object> map = new HashMap<>();
+
+
+        map.put("email", authenticationRequestDto.getEmail());
+        map.put("password", authenticationRequestDto.getPassword());
+        Map<String, Object> mapEntity = new HashMap<>();
+        mapEntity.put("requestDto", authenticationRequestDto);
+
+
+        HttpEntity<AuthenticationRequestDto> entity = new HttpEntity<>(authenticationRequestDto, headers);
+
+        // send POST request
+        System.out.println(url);
+        ResponseEntity<LinkedHashMap> response = restTemplate.exchange(url, HttpMethod.POST, entity, LinkedHashMap.class);
+
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            System.out.println(response.getBody());
+            System.out.println(response.getBody().getClass());
+
+            return (String) response.getBody().get("token");
+
+        }
+        return null;
+    }
+
+
+    public void delete(int id) {
         orderDao.delete(id);
     }
 
@@ -152,6 +227,7 @@ public class OrderService {
         // build the request
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(headers);
 
+
         // send POST request
         ResponseEntity<LinkedHashMap> response = restTemplate.exchange(url, HttpMethod.GET, entity, LinkedHashMap.class);
 
@@ -167,7 +243,7 @@ public class OrderService {
         return null;
     }
 
-    public OfferDto getOfferDtoByLinkedHashMap(LinkedHashMap offer){
+    public OfferDto getOfferDtoByLinkedHashMap(LinkedHashMap offer) {
         OfferDto offerDto = new OfferDto();
         offerDto.setOffer_id(Integer.parseInt(offer.get("offer_id").toString()));
         offerDto.setName(offer.get("name").toString());
@@ -179,10 +255,13 @@ public class OrderService {
         return offerDto;
     }
 
-    public CustomerDto getCustomerDtoByLinkedHashMap(LinkedHashMap customer){
+    public CustomerDto getCustomerDtoByLinkedHashMap(LinkedHashMap customer) {
         return new CustomerDto(
                 customer.get("customer_id").toString(),
-                customer.get("email").toString()
+                customer.get("email").toString(),
+                customer.get("password").toString(),
+                customer.get("status").toString(),
+                customer.get("role").toString()
         );
     }
 }

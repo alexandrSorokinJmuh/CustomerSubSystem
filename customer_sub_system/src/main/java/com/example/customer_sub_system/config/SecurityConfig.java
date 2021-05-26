@@ -43,21 +43,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/", "/api/auth/login", "/auth/login").permitAll()
+                    .antMatchers("/").permitAll()
+                    .antMatchers("/api/auth/login", "/auth/login", "/customer/customers/getByEmail").permitAll()
 
                     .anyRequest()
                     .authenticated()
                 .and()
-                    .apply(jwtConfigurer)
-                .and()
-                    .formLogin()
-                    .loginPage("/auth/login")
-                    .permitAll()
-                .and()
-                    .rememberMe()
-                .and()
-                    .logout()
-                    .permitAll();;
+                    .apply(jwtConfigurer);
     }
 
     @Bean

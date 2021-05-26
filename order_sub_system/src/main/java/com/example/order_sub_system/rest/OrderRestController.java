@@ -6,13 +6,12 @@ import com.example.order_sub_system.dto.OfferDto;
 import com.example.order_sub_system.dto.OrdersDto;
 import com.example.order_sub_system.entities.Orders;
 import com.example.order_sub_system.entities.Status;
-import com.example.order_sub_system.orders.OrderService;
+import com.example.order_sub_system.services.OrderService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;

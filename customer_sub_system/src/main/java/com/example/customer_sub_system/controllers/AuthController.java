@@ -24,8 +24,6 @@ public class AuthController {
     @GetMapping("/login")
     public String getLoginPage(Model model) {
         model.addAttribute("title", "login");
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-
         return "login";
     }
 

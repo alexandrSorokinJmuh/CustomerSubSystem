@@ -110,4 +110,8 @@ public class CustomerService {
             );
         return this.update(customerDto.getCustomer_id(), customer);
     }
+
+    public Customer getByEmail(String email) {
+        return customerDao.findByEmail(email).get();
+    }
 }

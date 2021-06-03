@@ -3,8 +3,8 @@
 <@base.body "${title}">
     <form id="addForm" method="POST" action="/category">
         <div class="form-control">
-            <label for="name">Enter name: </label>
-            <input type="text" name="name" id="name"/>
+            <label for="name" class="col-2">Enter name: </label>
+            <input type="text" class="col-2" name="name" id="name"/>
         </div>
         <div class="d-flex flex-row">
             <input class="btn btn-success" type="submit" value="Create!"/>

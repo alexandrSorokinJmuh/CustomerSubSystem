@@ -7,12 +7,12 @@
         <input type="hidden" name="_method" value="put">
         <input type="hidden" value="${order.order_id}" name="order_id"/>
         <div class="form-control">
-            <label for="name">Enter order name: </label>
-            <input type="text" value="${order.name}" name="name" id="name"/>
+            <label for="name" class="col-2">Enter order name: </label>
+            <input type="text" value="${order.name}" class="col-2" name="name" id="name"/>
         </div>
         <div class="customer form-control">
-            <label for="input_customer">Customer: </label>
-            <input type="text" id="input_customer"
+            <label for="input_customer" class="col-2">Customer: </label>
+            <input type="text" class="col-2" id="input_customer"
                    <#if customer??>value="${customer.email}"</#if>
             >
             <input type="hidden" name="customer_id" id="customer_id"
@@ -21,8 +21,8 @@
         </div>
 
         <div class="offer form-control">
-            <label for="input_offer">Offer: </label>
-            <input type="text" id="input_offer"
+            <label for="input_offer" class="col-2">Offer: </label>
+            <input type="text" class="col-2" id="input_offer"
                    <#if offer??>value="${offer.name}"</#if>
             >
             <input type="hidden" name="offer_id" id="offer_id"
@@ -30,8 +30,8 @@
             >
         </div>
         <div class="deliveryTime form-control">
-            <label for="deliveryTime">Delivery Time: </label>
-            <input type="date" id="deliveryTime" name="deliveryTime"
+            <label for="deliveryTime" class="col-2">Delivery Time: </label>
+            <input type="date" class="col-2" id="deliveryTime" name="deliveryTime"
                     <#if order.deliveryTime??> value="${order.deliveryTime?string["yyyy-MM-dd"]}" </#if>
             >
         </div>

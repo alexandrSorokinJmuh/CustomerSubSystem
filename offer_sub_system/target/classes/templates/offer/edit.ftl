@@ -11,12 +11,12 @@
         <input type="hidden" name="_method" value="put">
         <input type="hidden" value="${offer.offer_id}" name="offer_id"/>
         <div class="form-control">
-            <label for="name">Enter offer name: </label>
-            <input type="text" value="${offer.name}" name="name" id="name"/>
+            <label for="name" class="col-2">Enter offer name: </label>
+            <input type="text" class="col-2" value="${offer.name}" name="name" id="name"/>
         </div>
         <div class="form-control">
-            <label for="price">Enter price: </label>
-            <input type="number" placeholder="1.0" step="0.01" min="0"
+            <label for="price" class="col-2">Enter price: </label>
+            <input type="number" class="col-2" placeholder="1.0" step="0.01" min="0"
                    value="${string_to_int(offer.price?string["0.00"])}" name="price" id="price"/>
         </div>
 
@@ -63,20 +63,30 @@
         <div class="form-control">
             <div id="characteristics">
                 <#list offer.offerCharacteristics as offerCharacteristic>
-                    <div class="characteristicHolder" data-index="${offerCharacteristic_index}" id="characteristicHolder${offerCharacteristic_index}">
-                        <label for="characteristic${offerCharacteristic_index}">Characteristics: </label>
-                        <input type="text" class="input_characteristic" id="characteristic${offerCharacteristic_index}"
-                               value="${offerCharacteristic.characteristic.name}"/>
-                        <input type="hidden" name="characteristics" id="characteristic${offerCharacteristic_index}_id"
-                               value="${offerCharacteristic.characteristic.characteristic_id}">
-                        <label for="characteristicValue${offerCharacteristic_index}">Value:</label>
-                        <input type="text" name="characteristicValues"
-                               id="characteristicValue${offerCharacteristic_index}"
-                               value="${offerCharacteristic.characteristicValue.value}"/>
-                        <button class="characteristicRemove btn btn-light" id="characteristicRemove${offerCharacteristic_index}"
-                                data-remove="${offerCharacteristic_index}"
-                        >
-                            Убрать</button>
+                    <div class="characteristicHolder d-flex"
+                         data-index="${offerCharacteristic_index}"
+                         id="characteristicHolder${offerCharacteristic_index}">
+                        <div class="d-flex w-50 align-items-center">
+                            <label for="characteristic${offerCharacteristic_index}">Characteristic:</label>
+                            <input type="text" class="input_characteristic ms-3"
+                                   id="characteristic${offerCharacteristic_index}"
+                                   value="${offerCharacteristic.characteristic.name}"/>
+                            <input type="hidden" name="characteristics"
+                                   id="characteristic${offerCharacteristic_index}_id"
+                                   value="${offerCharacteristic.characteristic.characteristic_id}">
+                        </div>
+                        <div class="d-flex w-50 align-items-center">
+                            <label for="characteristicValue${offerCharacteristic_index}">Value:</label>
+                            <input type="text" name="characteristicValues" class="ms-3"
+                                   id="characteristicValue${offerCharacteristic_index}"
+                                   value="${offerCharacteristic.characteristicValue.value}"/>
+                            <button class="characteristicRemove btn btn-light"
+                                    id="characteristicRemove${offerCharacteristic_index}"
+                                    data-remove="${offerCharacteristic_index}"
+                            >
+                                Убрать
+                            </button>
+                        </div>
                     </div>
                 </#list>
             </div>
@@ -116,18 +126,22 @@
 
             let characteristicHolders = $(".characteristicHolder");
             let characteristicHolder_id = 0
-            if (characteristicHolders.length > 0){
+            if (characteristicHolders.length > 0) {
                 characteristicHolder_id = parseInt(characteristicHolders.last().attr("data-index")) + 1
             }
 
-            let newElement = $('<div class="characteristicHolder" data-index="'+characteristicHolder_id+'" id="characteristicHolder'+ characteristicHolder_id +'">' +
-                '<label for="characteristic' + characteristicHolder_id + '">Characteristics: </label>' +
-                '<input type="text" class="input_characteristic" id="characteristic' + characteristicHolder_id + '" value=""/>' +
+            let newElement = $('<div class="characteristicHolder d-flex" data-index="' + characteristicHolder_id + '" id="characteristicHolder' + characteristicHolder_id + '">' +
+                '<div class="d-flex w-50 align-items-center">' +
+                '<label for="characteristic' + characteristicHolder_id + '">Characteristic:</label>' +
+                '<input type="text" class="input_characteristic ms-3" id="characteristic' + characteristicHolder_id + '"/>' +
                 '<input type="hidden" name="characteristics" id="characteristic' + characteristicHolder_id + '_id">' +
+                '</div>' +
+                '<div class="d-flex w-50 align-items-center">' +
                 '<label for="characteristicValue' + characteristicHolder_id + '">Value:</label>' +
-                '<input type="text" name="characteristicValues" id="characteristicValue' + characteristicHolder_id + '"/>' +
+                '<input type="text" class="ms-3" name="characteristicValues" id="characteristicValue' + characteristicHolder_id + '"/>' +
                 '<button class="characteristicRemove btn btn-light" id="characteristicRemove' + characteristicHolder_id + '" data-remove="' +
                 characteristicHolder_id + '" > Убрать</button>' +
+                '</div>' +
                 '</div>'
             )
             console.log(newElement)
@@ -136,9 +150,8 @@
             removeChar($("#characteristicRemove" + characteristicHolder_id))
 
 
-
-
         })
+
         function removeChar(element) {
             console.log(element)
             $(element).click(function (event) {
@@ -148,25 +161,26 @@
                 $("#characteristicHolder" + removeId).remove()
             })
         }
+
         function autoCompleteElement(element) {
             $(element).autocomplete({
-                source: function( request, response ) {
+                source: function (request, response) {
                     $.ajax({
                         url: "characteristicsNotInOffer",
                         type: 'get',
                         dataType: "json",
                         data: {
                             "term": request.term,
-                            "characteristics": $.map( $('input[name~="characteristics"]'), function( val, i ) {
+                            "characteristics": $.map($('input[name~="characteristics"]'), function (val, i) {
                                 let v = $(val).val()
                                 console.log(val)
                                 console.log(v)
-                                if(v !== "")
+                                if (v !== "")
                                     return $(val).val()
                             }).join(", ")
                         },
-                        success: function( data ) {
-                            response( data );
+                        success: function (data) {
+                            response(data);
                         }
                     });
                 },
@@ -174,13 +188,13 @@
                 maxWidth: $(this).width,
                 minLength: 1,
                 select: function (event, ui) {
-                    let x = "#"+this.id
+                    let x = "#" + this.id
                     $(x).val(ui.item.label)
                     console.log($(x))
                     console.log(ui.item)
                     console.log(ui.item.value)
 
-                    let y = x+"_id"
+                    let y = x + "_id"
                     $(y).val(ui.item.value);
 
                     console.log()
@@ -188,6 +202,7 @@
                 }
             })
         }
+
         $(".characteristicRemove").each(function () {
             removeChar(this)
         });

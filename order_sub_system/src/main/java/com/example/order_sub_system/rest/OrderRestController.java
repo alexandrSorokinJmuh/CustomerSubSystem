@@ -283,4 +283,42 @@ public class OrderRestController {
 
     }
 
+    @GetMapping("getToken")
+    public String getToken(HttpServletRequest request, String email, String password) {
+
+        if (email == null || email.isEmpty()) {
+            email = request.getParameter("email");
+        }
+        if (password == null || password.isEmpty()) {
+            password = request.getParameter("password");
+        }
+        RestTemplate restTemplate = new RestTemplate();
+        String getTokenUrl = String.format("%s/api/auth/login", customerOriginAddress);
+
+        HttpHeaders headers = new HttpHeaders();
+        // set `content-type` header
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        // set `accept` header
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        Map<String, Object> tokenEntityMap = new HashMap<>();
+
+
+        tokenEntityMap.put("email", email);
+        tokenEntityMap.put("password", password);
+        System.out.println(email);
+        System.out.println(password);
+
+        // build the request
+        HttpEntity<Map<String, Object>> tokenEntity = new HttpEntity<>(tokenEntityMap, headers);
+
+        ResponseEntity<Object> response = restTemplate.postForEntity(getTokenUrl, tokenEntity, Object.class);
+        System.out.println(response.getBody());
+        System.out.println(response.getStatusCode());
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return ((HashMap) response.getBody()).get("token").toString();
+
+        }
+        return "";
+    }
+
 }

@@ -1,7 +1,7 @@
 <#import "../base.ftl" as base>
 
 <@base.body "${title}">
-    <form id="addForm" method="POST" action="/customer">
+    <form id="addForm" method="POST" action="/customer/new">
         <div class="form-control">
             <label for="email" class="col-2">Enter email: </label>
             <input type="email" class="col-2" name="email" id="email"/>

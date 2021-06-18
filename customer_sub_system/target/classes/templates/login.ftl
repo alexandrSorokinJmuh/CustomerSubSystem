@@ -10,15 +10,18 @@
             </p>
             <p>
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password"
+                       required>
             </p>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <div class="d-flex flex-row">
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <a class="btn btn-lg btn-success btn-block" href="/customer/new">Sign up</a>
+            </div>
         </form>
     </div>
 
     <script>
-        $("#loginForm").on("submit", function(e) {
-
+        $("#loginForm").on("submit", function (e) {
 
 
             e.preventDefault(); // avoid to execute the actual submit of the form.
@@ -30,8 +33,7 @@
                 type: "POST",
                 url: url,
                 data: form.serialize(),
-                success: function(data)
-                {
+                success: function (data) {
                     console.log(data);
 
                     set_cookie('Authorization', data['token'], null, null, null, '/')

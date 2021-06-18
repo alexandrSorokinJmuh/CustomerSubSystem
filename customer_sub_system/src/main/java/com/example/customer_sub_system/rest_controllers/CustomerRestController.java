@@ -40,7 +40,7 @@ public class CustomerRestController {
         return customerService.getById(id).getPaidTypes();
     }
 
-    @PostMapping("")
+    @PostMapping("/new")
     public Customer createRest(Customer customer) {
         customerService.create(customer);
         return customer;

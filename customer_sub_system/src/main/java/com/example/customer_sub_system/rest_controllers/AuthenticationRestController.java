@@ -40,7 +40,7 @@ public class AuthenticationRestController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(AuthenticationRequestDto requestDto){
         try{
-
+            System.out.println(requestDto);
             String email = requestDto.getEmail();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDto.getEmail(), requestDto.getPassword()));
             Customer customer = customerDao.findByEmail(requestDto.getEmail()).orElseThrow(()->new UsernameNotFoundException("User doesn't exists"));

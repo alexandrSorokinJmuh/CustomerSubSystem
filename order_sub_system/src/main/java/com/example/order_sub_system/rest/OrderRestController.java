@@ -292,6 +292,7 @@ public class OrderRestController {
         if (password == null || password.isEmpty()) {
             password = request.getParameter("password");
         }
+        System.out.println(request);
         RestTemplate restTemplate = new RestTemplate();
         String getTokenUrl = String.format("%s/api/auth/login", customerOriginAddress);
 

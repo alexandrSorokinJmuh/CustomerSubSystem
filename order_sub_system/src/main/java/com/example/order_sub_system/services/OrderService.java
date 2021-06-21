@@ -101,7 +101,7 @@ public class OrderService {
     }
 
     public CustomerDto getCustomerByEmail(String email) {
-        String url = String.format("%s/customer/customers/getByEmail", customerOriginAddress);
+        String url = String.format("%s/api/auth/customers/getByEmail?email=%s", customerOriginAddress, email);
         HttpHeaders headers = new HttpHeaders();
         // set `content-type` header
         headers.setContentType(MediaType.APPLICATION_JSON);

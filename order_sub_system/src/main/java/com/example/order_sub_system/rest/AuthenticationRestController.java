@@ -2,6 +2,7 @@ package com.example.order_sub_system.rest;
 
 
 import com.example.order_sub_system.dto.AuthenticationRequestDto;
+import com.example.order_sub_system.security.JwtTokenProvider;
 import com.example.order_sub_system.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,10 +29,12 @@ public class AuthenticationRestController {
 
     private final AuthenticationManager authenticationManager;
     private OrderService orderService;
+    private JwtTokenProvider jwtTokenProvider;
 
-    public AuthenticationRestController(AuthenticationManager authenticationManager, OrderService orderService) {
+    public AuthenticationRestController(AuthenticationManager authenticationManager, OrderService orderService, JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
         this.orderService = orderService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/login")
@@ -39,7 +42,7 @@ public class AuthenticationRestController {
         try{
             System.out.println(requestDto);
             String email = requestDto.getEmail();
-
+            Authentication authentication = jwtTokenProvider.getAuthenticationByEmail(email);
             String token = orderService.getAuthToken(requestDto);
 
             Map<Object, Object> responseMap = new HashMap<>();

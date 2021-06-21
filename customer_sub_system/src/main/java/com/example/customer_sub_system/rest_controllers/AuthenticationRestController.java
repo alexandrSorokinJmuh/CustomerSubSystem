@@ -5,6 +5,7 @@ import com.example.customer_sub_system.dao.CustomerDao;
 import com.example.customer_sub_system.dto.AuthenticationRequestDto;
 import com.example.customer_sub_system.entities.Customer;
 import com.example.customer_sub_system.security.JwtTokenProvider;
+import com.example.customer_sub_system.services.CustomerService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -111,7 +112,15 @@ public class AuthenticationRestController {
         }
 
     }
+    @GetMapping("/customers/getByEmail")
+    public Customer indexRest(HttpServletRequest request,String email) {
+        if (email == null || email.isEmpty())
+            email = request.getParameter("email");
+        System.out.println("email: " + email);
 
+
+        return customerDao.findByEmail(email).get();
+    }
     @PostMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response){
 

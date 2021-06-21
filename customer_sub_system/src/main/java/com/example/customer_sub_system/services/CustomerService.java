@@ -112,6 +112,7 @@ public class CustomerService {
     }
 
     public Customer getByEmail(String email) {
+        System.out.println(email);
         return customerDao.findByEmail(email).get();
     }
 }

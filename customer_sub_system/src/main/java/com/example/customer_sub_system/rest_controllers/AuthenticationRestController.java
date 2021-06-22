@@ -30,6 +30,9 @@ public class AuthenticationRestController {
     private CustomerDao customerDao;
     private JwtTokenProvider jwtTokenProvider;
 
+    @Value("${jwt.header}")
+    String authenticationHeader;
+
     @Value("${http.customer.address}")
     String customerOriginAddress;
 
@@ -40,7 +43,6 @@ public class AuthenticationRestController {
     }
 
     @PostMapping("/login")
-
     public ResponseEntity<?> authenticate(HttpServletRequest request,AuthenticationRequestDto requestDto){
         try{
             System.out.println(requestDto);
@@ -60,43 +62,85 @@ public class AuthenticationRestController {
             return new ResponseEntity<>("Invalid email or password", HttpStatus.FORBIDDEN);
         }
     }
-    @GetMapping("getToken")
-    public String getToken(HttpServletRequest request, String email, String password) {
 
-        if (email == null || email.isEmpty()) {
-            email = request.getParameter("email");
-        }
-        if (password == null || password.isEmpty()) {
-            password = request.getParameter("password");
-        }
-        RestTemplate restTemplate = new RestTemplate();
-        String getTokenUrl = String.format("%s/api/auth/login", customerOriginAddress);
+    @PostMapping("/getToken")
+    public ResponseEntity<?> authenticate(HttpServletRequest request){
+        String token = jwtTokenProvider.resolveToken(request);
+        System.out.println("token: " + token);
+        return ResponseEntity.ok()
+                .header(authenticationHeader, token)
+                .body(token);
+    }
 
+    @GetMapping("/getToken")
+    public String getToken(HttpServletRequest request) {
+        String url = String.format("%s/api/auth/getToken", customerOriginAddress);
+
+        // create an instance of RestTemplate
+
+        // create headers
         HttpHeaders headers = new HttpHeaders();
         // set `content-type` header
         headers.setContentType(MediaType.APPLICATION_JSON);
         // set `accept` header
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        Map<String, Object> tokenEntityMap = new HashMap<>();
+        headers.set(authenticationHeader, jwtTokenProvider.resolveToken(request));
 
 
-        tokenEntityMap.put("email", email);
-        tokenEntityMap.put("password", password);
-        System.out.println(email);
-        System.out.println(password);
+        Map<String, Object> map = new HashMap<>();
 
-        // build the request
-        HttpEntity<Map<String, Object>> tokenEntity = new HttpEntity<>(tokenEntityMap, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<AuthenticationRequestDto> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<Object> response = restTemplate.postForEntity(getTokenUrl, tokenEntity, Object.class);
-        System.out.println(response.getBody());
-        System.out.println(response.getStatusCode());
+        // send POST request
+        System.out.println(url);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+
         if (response.getStatusCode() == HttpStatus.OK) {
-            return ((HashMap) response.getBody()).get("token").toString();
+            return response.getBody();
 
         }
-        return "";
+        return null;
     }
+
+//    @GetMapping("getToken")
+//    public String getToken(HttpServletRequest request, String email, String password) {
+//
+//        if (email == null || email.isEmpty()) {
+//            email = request.getParameter("email");
+//        }
+//        if (password == null || password.isEmpty()) {
+//            password = request.getParameter("password");
+//        }
+//        RestTemplate restTemplate = new RestTemplate();
+//        String getTokenUrl = String.format("%s/api/auth/login", customerOriginAddress);
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        // set `content-type` header
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//        // set `accept` header
+//        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+//        Map<String, Object> tokenEntityMap = new HashMap<>();
+//
+//
+//        tokenEntityMap.put("email", email);
+//        tokenEntityMap.put("password", password);
+//        System.out.println(email);
+//        System.out.println(password);
+//
+//        // build the request
+//        HttpEntity<Map<String, Object>> tokenEntity = new HttpEntity<>(tokenEntityMap, headers);
+//
+//        ResponseEntity<Object> response = restTemplate.postForEntity(getTokenUrl, tokenEntity, Object.class);
+//        System.out.println(response.getBody());
+//        System.out.println(response.getStatusCode());
+//        if (response.getStatusCode() == HttpStatus.OK) {
+//            return ((HashMap) response.getBody()).get("token").toString();
+//
+//        }
+//        return "";
+//    }
     @PostMapping("/getCustomerId")
     public ResponseEntity<?> getCustomerId(String token){
         if (jwtTokenProvider.validateToken(token)){

@@ -128,7 +128,33 @@ public class OrderService {
 
         return null;
     }
+    public String getToken() {
+        String url = String.format("%s/api/auth/getToken", customerOriginAddress);
 
+        // create an instance of RestTemplate
+
+        // create headers
+        HttpHeaders headers = new HttpHeaders();
+        // set `content-type` header
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        // set `accept` header
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        Map<String, Object> map = new HashMap<>();
+
+
+        HttpEntity<AuthenticationRequestDto> entity = new HttpEntity<>(headers);
+
+        // send POST request
+        System.out.println(url);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return response.getBody();
+
+        }
+        return null;
+    }
 
     public String getAuthToken(AuthenticationRequestDto authenticationRequestDto) {
         String url = String.format("%s/api/auth/login", customerOriginAddress);

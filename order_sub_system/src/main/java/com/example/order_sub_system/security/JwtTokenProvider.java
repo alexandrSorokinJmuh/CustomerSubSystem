@@ -66,7 +66,7 @@ public class JwtTokenProvider {
                     .filter(cookie -> cookie.getName().equals(authorizationHeader))
                     .map(Cookie::getValue)
                     .findFirst()
-                    .orElse("");
+                    .orElse(null);
         }
 
         return res;

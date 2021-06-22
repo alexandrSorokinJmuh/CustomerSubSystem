@@ -34,10 +34,30 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/customer">All</a>
+                        <a class="nav-link" aria-current="page" href="/customer">Customers</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/offer">Offers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/category">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/characteristic">Characteristics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="/order">Orders</a>
+                    </li>
+
                 </ul>
-                <a class="btn btn-light" href="/auth/success">Go Logout</a>
+                <#if known>
+                    <form id="logoutForm" action="/api/auth/logout" method="POST">
+                        <button class="btn btn-light" type="submit">Logout</button>
+                    </form>
+                <#else>
+                    <a href="/auth/login" class="btn btn-primary">Sign in</a>
+                </#if>
+
             </div>
         </div>
     </nav>
@@ -46,7 +66,7 @@
     </div>
 
     <script>
-        $("#logoutForm").on("submit", function (e) {
+        $("#logoutForm").on("submit", function(e) {
 
             e.preventDefault(); // avoid to execute the actual submit of the form.
 
@@ -57,8 +77,10 @@
                 type: "POST",
                 url: url,
                 data: form.serialize(),
-                success: function (data) {
+                success: function(data)
+                {
                     console.log(data);
+                    eraseCookie('JSESSIONID', '/')
                     eraseCookie('Authorization', '/')
                     // delete_cookie('Authorization', '/')
 
@@ -72,6 +94,7 @@
 
 
         });
+
     </script>
 
     <script>

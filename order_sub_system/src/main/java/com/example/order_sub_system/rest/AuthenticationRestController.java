@@ -27,34 +27,6 @@ import java.util.Map;
 @RequestMapping(value = "/api/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationRestController {
 
-    private final AuthenticationManager authenticationManager;
-    private OrderService orderService;
-    private JwtTokenProvider jwtTokenProvider;
-
-    public AuthenticationRestController(AuthenticationManager authenticationManager, OrderService orderService, JwtTokenProvider jwtTokenProvider) {
-        this.authenticationManager = authenticationManager;
-        this.orderService = orderService;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticate(AuthenticationRequestDto requestDto){
-        try{
-            System.out.println(requestDto);
-            String email = requestDto.getEmail();
-            Authentication authentication = jwtTokenProvider.getAuthenticationByEmail(email);
-            String token = orderService.getAuthToken(requestDto);
-
-            Map<Object, Object> responseMap = new HashMap<>();
-            responseMap.put("email", requestDto.getEmail().toString());
-            responseMap.put("token", token);
-
-            return ResponseEntity.ok(responseMap);
-        }catch (AuthenticationException e){
-            return new ResponseEntity<>("Invalid email or password", HttpStatus.FORBIDDEN);
-        }
-    }
-
 
     @PostMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response){

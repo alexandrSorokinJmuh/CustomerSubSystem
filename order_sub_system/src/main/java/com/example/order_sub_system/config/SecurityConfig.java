@@ -19,12 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Value("${http.customer.address}")
-    String customerAddress;
-    @Value("${http.offer.address}")
-    String offerAddress;
-    @Value("${http.order.address}")
-    String orderAddress;
+
     private final JwtConfigurer jwtConfigurer;
 
 
@@ -37,24 +32,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .httpBasic().disable()
+                .sessionManagement()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/api/auth/login", "/auth/login").permitAll()
+                .antMatchers("/", "/auth/login").permitAll()
 
-                .anyRequest()
-                .authenticated()
+                    .anyRequest()
+                    .authenticated()
                 .and()
-                .apply(jwtConfigurer)
+                    .apply(jwtConfigurer)
                 .and()
-                .formLogin()
-                .loginPage("/auth/login")
-                .permitAll()
+                    .formLogin()
+                    .loginPage("/auth/login")
+                    .permitAll()
                 .and()
-                .rememberMe()
+                    .rememberMe()
                 .and()
-                .logout()
-                .permitAll();;
+                    .logout()
+                    .permitAll();;
     }
 
     @Bean

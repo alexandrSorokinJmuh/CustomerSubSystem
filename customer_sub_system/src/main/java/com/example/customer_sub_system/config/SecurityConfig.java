@@ -40,11 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .httpBasic().disable()
+                .sessionManagement()
                 .and()
                 .authorizeRequests()
                     .antMatchers("/").permitAll()
-                    .antMatchers("/api/auth/login", "/auth/login", "/api/auth/getByEmail", "/customer/new").permitAll()
+                    .antMatchers("/api/auth/login", "/auth/login", "/api/auth/getToken", "/api/auth/getByEmail", "/customer/new").permitAll()
 
                     .anyRequest()
                     .authenticated()

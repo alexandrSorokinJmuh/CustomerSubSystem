@@ -36,8 +36,12 @@
                 success: function (data) {
                     console.log(data);
 
-                    set_cookie('Authorization', data['token'], null, null, null, '/')
+                    // set_cookie('Authorization', data['token'], null, null, null, '/', 'localhost')
+                    // set_cookie('Authorization', data['token'], null, null, null, '/', 'offersystem.jelastic.regruhosting.ru')
+                    // set_cookie('Authorization', data['token'], null, null, null, '/', 'customersystem.jelastic.regruhosting.ru')
 
+
+                    set_cookie('Authorization', data['token'], null, null, null, '/')
                     // var url = "/customer/" + data["customer_id"];
                     // $(location).attr('href',url);
                 },

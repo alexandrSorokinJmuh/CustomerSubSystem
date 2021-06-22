@@ -12,26 +12,31 @@ import java.util.Map;
 
 @Controller
 public class MainController {
-    CustomerService customerService;
-    public MainController(CustomerService customerService) {
-        this.customerService = customerService;
+
+    @Value("${http.order.address}")
+    String orderOriginAddress;
+    @Value("${http.offer.address}")
+    String offerOriginAddress;
+
+
+
+    @GetMapping("/order")
+    public String order() {
+        return "redirect:" + orderOriginAddress + "/order";
     }
 
-
-    @GetMapping("/greeting")
-    public String greeting(
-            @RequestParam(name="name", required=false, defaultValue="World") String name,
-            Map<String, Object> model
-    ) {
-        model.put("name", name);
-        return "greeting";
+    @GetMapping("/characteristic")
+    public String characteristic() {
+        return "redirect:" + offerOriginAddress + "/characteristic";
     }
 
+    @GetMapping("/offer")
+    public String offer() {
+        return "redirect:" + offerOriginAddress + "/offer";
+    }
 
-
-    @GetMapping
-    public String main(Map<String, Object> model) {
-        model.put("some", "hello, letsCode!");
-        return "main";
+    @GetMapping("/category")
+    public String category() {
+        return "redirect:" + offerOriginAddress + "/category";
     }
 }

@@ -5,21 +5,20 @@ import com.example.customer_sub_system.dao.CustomerDao;
 import com.example.customer_sub_system.dto.AuthenticationRequestDto;
 import com.example.customer_sub_system.entities.Customer;
 import com.example.customer_sub_system.security.JwtTokenProvider;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import com.example.customer_sub_system.services.CustomerService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +30,12 @@ public class AuthenticationRestController {
     private CustomerDao customerDao;
     private JwtTokenProvider jwtTokenProvider;
 
+    @Value("${jwt.header}")
+    String authenticationHeader;
+
+    @Value("${http.customer.address}")
+    String customerOriginAddress;
+
     public AuthenticationRestController(AuthenticationManager authenticationManager, CustomerDao customerDao, JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
         this.customerDao = customerDao;
@@ -38,9 +43,12 @@ public class AuthenticationRestController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(AuthenticationRequestDto requestDto){
+    public ResponseEntity<?> authenticate(HttpServletRequest request,AuthenticationRequestDto requestDto){
         try{
             System.out.println(requestDto);
+            System.out.println(request.getParameterMap().entrySet());
+
+            System.out.println(request);
             String email = requestDto.getEmail();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDto.getEmail(), requestDto.getPassword()));
             Customer customer = customerDao.findByEmail(requestDto.getEmail()).orElseThrow(()->new UsernameNotFoundException("User doesn't exists"));
@@ -55,6 +63,84 @@ public class AuthenticationRestController {
         }
     }
 
+    @PostMapping("/getToken")
+    public ResponseEntity<?> authenticate(HttpServletRequest request){
+        String token = jwtTokenProvider.resolveToken(request);
+        System.out.println("token: " + token);
+        return ResponseEntity.ok()
+                .header(authenticationHeader, token)
+                .body(token);
+    }
+
+    @GetMapping("/getToken")
+    public String getToken(HttpServletRequest request) {
+        String url = String.format("%s/api/auth/getToken", customerOriginAddress);
+
+        // create an instance of RestTemplate
+
+        // create headers
+        HttpHeaders headers = new HttpHeaders();
+        // set `content-type` header
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        // set `accept` header
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.set(authenticationHeader, jwtTokenProvider.resolveToken(request));
+
+
+        Map<String, Object> map = new HashMap<>();
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<AuthenticationRequestDto> entity = new HttpEntity<>(headers);
+
+        // send POST request
+        System.out.println(url);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return response.getBody();
+
+        }
+        return null;
+    }
+
+//    @GetMapping("getToken")
+//    public String getToken(HttpServletRequest request, String email, String password) {
+//
+//        if (email == null || email.isEmpty()) {
+//            email = request.getParameter("email");
+//        }
+//        if (password == null || password.isEmpty()) {
+//            password = request.getParameter("password");
+//        }
+//        RestTemplate restTemplate = new RestTemplate();
+//        String getTokenUrl = String.format("%s/api/auth/login", customerOriginAddress);
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        // set `content-type` header
+//        headers.setContentType(MediaType.APPLICATION_JSON);
+//        // set `accept` header
+//        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+//        Map<String, Object> tokenEntityMap = new HashMap<>();
+//
+//
+//        tokenEntityMap.put("email", email);
+//        tokenEntityMap.put("password", password);
+//        System.out.println(email);
+//        System.out.println(password);
+//
+//        // build the request
+//        HttpEntity<Map<String, Object>> tokenEntity = new HttpEntity<>(tokenEntityMap, headers);
+//
+//        ResponseEntity<Object> response = restTemplate.postForEntity(getTokenUrl, tokenEntity, Object.class);
+//        System.out.println(response.getBody());
+//        System.out.println(response.getStatusCode());
+//        if (response.getStatusCode() == HttpStatus.OK) {
+//            return ((HashMap) response.getBody()).get("token").toString();
+//
+//        }
+//        return "";
+//    }
     @PostMapping("/getCustomerId")
     public ResponseEntity<?> getCustomerId(String token){
         if (jwtTokenProvider.validateToken(token)){
@@ -70,7 +156,15 @@ public class AuthenticationRestController {
         }
 
     }
+    @GetMapping("/getByEmail")
+    public Customer indexRest(HttpServletRequest request,String email) {
+        if (email == null || email.isEmpty())
+            email = request.getParameter("email");
+        System.out.println("email: " + email);
 
+
+        return customerDao.findByEmail(email).get();
+    }
     @PostMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response){
 

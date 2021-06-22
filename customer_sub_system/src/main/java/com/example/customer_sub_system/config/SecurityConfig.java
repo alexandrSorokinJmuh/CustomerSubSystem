@@ -40,10 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .httpBasic().disable()
+                .sessionManagement()
                 .and()
-                    .authorizeRequests()
-                    .antMatchers("/", "/api/auth/login", "/auth/login", "/customer/new").permitAll()
+                .authorizeRequests()
+                    .antMatchers("/").permitAll()
+                    .antMatchers("/api/auth/login", "/auth/login", "/api/auth/getToken", "/api/auth/getByEmail", "/customer/new").permitAll()
 
                     .anyRequest()
                     .authenticated()
@@ -57,12 +59,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .rememberMe()
                 .and()
                     .logout()
-                    .permitAll();;
+                    .permitAll();
     }
 
     @Bean
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception{
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 

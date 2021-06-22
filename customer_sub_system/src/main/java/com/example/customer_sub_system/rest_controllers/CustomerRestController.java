@@ -35,6 +35,7 @@ public class CustomerRestController {
     }
 
 
+
     @GetMapping("/customers/{customer_id}/paidTypes")
     public List<PaidType> showPaidTypes(@PathVariable("customer_id") int id) {
         return customerService.getById(id).getPaidTypes();

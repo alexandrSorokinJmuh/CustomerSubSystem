@@ -112,7 +112,7 @@ public class AuthenticationRestController {
         }
 
     }
-    @GetMapping("/customers/getByEmail")
+    @GetMapping("/getByEmail")
     public Customer indexRest(HttpServletRequest request,String email) {
         if (email == null || email.isEmpty())
             email = request.getParameter("email");

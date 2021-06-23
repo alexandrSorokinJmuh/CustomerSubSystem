@@ -7,12 +7,12 @@
         <input type="hidden" name="_method" value="put">
         <input type="hidden" value="${order.order_id}" name="order_id"/>
         <div class="form-control">
-            <label for="name">Enter order name: </label>
-            <input type="text" value="${order.name}" name="name" id="name"/>
+            <label for="name" class="col-2">Enter order name: </label>
+            <input type="text" value="${order.name}" class="col-2" name="name" id="name"/>
         </div>
         <div class="customer form-control">
-            <label for="input_customer">Customer: </label>
-            <input type="text" id="input_customer"
+            <label for="input_customer" class="col-2">Customer: </label>
+            <input type="text" class="col-2" id="input_customer"
                    <#if customer??>value="${customer.email}"</#if>
             >
             <input type="hidden" name="customer_id" id="customer_id"
@@ -21,8 +21,8 @@
         </div>
 
         <div class="offer form-control">
-            <label for="input_offer">Offer: </label>
-            <input type="text" id="input_offer"
+            <label for="input_offer" class="col-2">Offer: </label>
+            <input type="text" class="col-2" id="input_offer"
                    <#if offer??>value="${offer.name}"</#if>
             >
             <input type="hidden" name="offer_id" id="offer_id"
@@ -30,8 +30,8 @@
             >
         </div>
         <div class="deliveryTime form-control">
-            <label for="deliveryTime">Delivery Time: </label>
-            <input type="date" id="deliveryTime" name="deliveryTime"
+            <label for="deliveryTime" class="col-2">Delivery Time: </label>
+            <input type="date" class="col-2" id="deliveryTime" name="deliveryTime"
                     <#if order.deliveryTime??> value="${order.deliveryTime?string["yyyy-MM-dd"]}" </#if>
             >
         </div>
@@ -66,25 +66,20 @@
 
     <script>
         $("#editForm").on("submit", function (e) {
-
             e.preventDefault(); // avoid to execute the actual submit of the form.
-
             var form = $(this);
             var url = form.attr('action');
-
             $.ajax({
                 type: "PUT",
                 url: url,
                 data: form.serialize(), // serializes the form's elements.
                 success: function (data) {
-
                     console.log(data); // show response from the php script.
                     var url = "/order/" + data["order_id"];
                     $(location).attr('href', url);
                 }
             });
         });
-
         $("#input_offer").autocomplete({
             source: "getOfferByTerm",
             maxHeight: 400,
@@ -92,9 +87,7 @@
             minLength: 0,
             select: function (event, ui) {
                 $("#input_offer").val(ui.item.label)
-
                 $("#offer_id").val(ui.item.value);
-
                 return false;
             }
         })
@@ -105,9 +98,7 @@
             minLength: 0,
             select: function (event, ui) {
                 $("#input_customer").val(ui.item.label)
-
                 $("#customer_id").val(ui.item.value);
-
                 return false;
             }
         })

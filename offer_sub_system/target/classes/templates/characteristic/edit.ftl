@@ -6,12 +6,12 @@
         <input type="hidden" name="_method" value="put">
         <input type="hidden" value="${characteristic.characteristic_id}" name="characteristic_id"/>
         <div class="form-control">
-            <label for="name">Enter characteristic name: </label>
-            <input type="text" value="${characteristic.name}" name="name" id="name"/>
+            <label for="name" class="col-2">Enter characteristic name: </label>
+            <input type="text" class="col-2" value="${characteristic.name}" name="name" id="name"/>
         </div>
         <div class="form-control">
-            <label for="description">Enter characteristic description: </label>
-            <input type="text" value="${characteristic.description}" name="description" id="description"/>
+            <label for="description" class="col-2">Enter characteristic description: </label>
+            <input type="text" class="col-2" value="${characteristic.description}" name="description" id="description"/>
         </div>
         <div class="d-flex flex-row">
             <input class="btn btn-primary" type="submit" value="Update!"/>

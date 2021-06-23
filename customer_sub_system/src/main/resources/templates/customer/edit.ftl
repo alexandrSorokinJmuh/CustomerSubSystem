@@ -6,38 +6,37 @@
         <input type="hidden" name="_method" value="put">
         <input type="hidden" value="${customer.customer_id}" name="customer_id"/>
         <div class="form-control">
-            <label for="email">Enter email: </label>
-            <input type="email" value="${customer.email}" name="email" id="email"/>
+            <label for="email" class="col-2">Enter email: </label>
+            <input type="email" value="${customer.email}" name="email" class="col-2" id="email"/>
         </div>
         <div class="form-control">
-            <label for="pass">Enter password: </label>
-            <input type="password" value="" name="pass" id="pass"/>
-        </div>
-        <br>
-        <div class="form-control">
-            <label for="firstName">Enter firstName: </label>
-            <input type="text" value="${customer.firstName}" name="firstName" id="firstName"/>
-        </div>
-        <div class="form-control">
-            <label for="lastName">Enter lastName: </label>
-            <input type="text" value="${customer.lastName}" name="lastName" id="lastName"/>
+            <label for="pass" class="col-2">Enter password: </label>
+            <input type="password" value="" name="pass" class="col-2" id="pass"/>
         </div>
         <br>
         <div class="form-control">
-            <label for="phone">Enter phone: </label>
-            <input type="text" value="${customer.phone}" name="phone" id="phone"/>
+            <label for="firstName" class="col-2">Enter firstName: </label>
+            <input type="text" value="${customer.firstName}" class="col-2" name="firstName" id="firstName"/>
+        </div>
+        <div class="form-control">
+            <label for="lastName" class="col-2">Enter lastName: </label>
+            <input type="text" value="${customer.lastName}" class="col-2" name="lastName" id="lastName"/>
         </div>
         <br>
         <div class="form-control">
-            <label for="address">Enter address: </label>
-            <select name="addressId" id="address">
+            <label for="phone" class="col-2">Enter phone: </label>
+            <input type="text" value="${customer.phone}" class="col-2" name="phone" id="phone"/>
+        </div>
+        <br>
+        <div class="form-control">
+            <label for="address" class="col-2">Enter address: </label>
+            <select name="addressId" class="col-2" id="address">
                 <option value="">-----</option>
                 <#list allAddress as address>
                     <option <#if customer.address?? && customer.address.address_id == address.address_id>selected</#if>
                             value="${address.address_id}">${address.city}, ${address.country}
                         , ${address.state}</option>
                 </#list>
-
             </select>
         </div>
         <table class="table">

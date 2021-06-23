@@ -39,41 +39,6 @@ public class CustomerService {
         return customerDao.create(customer);
     }
 
-    public void testCreateCustomer(){
-        // Добавить пользователя
-        Customer customer = new Customer();
-        customer.setFirstName("asd");
-        customer.setLastName("sd");
-        customer.setEmail("asdf@asdf.ui");
-        customer.setPhone("545454545");
-        customer.setPassword("asd");
-        customer.setRole(Role.USER);
-        customer.setStatus(Status.ACTIVE);
-
-        customerDao.create(customer);
-    }
-
-    public void testChangeCustomer(){
-        // Изменить пользователя
-        Customer customer = customerDao.getAll().get(0);
-        customer.setFirstName("gf");
-        customer.setAddress(addressDao.getById(3));
-        customerDao.update(1, customer);
-    }
-
-    public void testAddAddress(){
-        // Добавить Самару
-        Address address = new Address();
-        address.setCountry("Россия");
-        address.setState("Саратовская область");
-        address.setCity("Самара");
-        addressDao.create(address);
-    }
-
-    public void testDeleteAddress(){
-        // Удалить Самару с её жителями
-        addressDao.delete(3);
-    }
 
     public Customer update(int id, Customer customer){
         return customerDao.update(id, customer);

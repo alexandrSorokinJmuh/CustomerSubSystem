@@ -10,6 +10,6 @@
     <br/>
     <hr/>
 
-    <a class="btn btn-primary" href="/order/new">Create new order</a>
+    <a class="btn btn-info" href="/order/new">Create new order</a>
 
 </@base.body>

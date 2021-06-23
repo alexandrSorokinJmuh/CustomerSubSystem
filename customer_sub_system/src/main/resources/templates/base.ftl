@@ -82,6 +82,7 @@
                     console.log(data);
                     eraseCookie('JSESSIONID', '/')
                     eraseCookie('Authorization', '/')
+                    location.reload()
                     // delete_cookie('Authorization', '/')
 
                     // var url = "/customer/" + data["customer_id"];

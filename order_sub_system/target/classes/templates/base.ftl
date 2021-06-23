@@ -90,8 +90,9 @@ known = Session.SPRING_SECURITY_CONTEXT??
                 success: function(data)
                 {
                     console.log(data);
-                    eraseCookie('JSESSIONID', '/')
+                    // eraseCookie('JSESSIONID', '/')
                     eraseCookie('Authorization', '/')
+                    location.reload()
                     // delete_cookie('Authorization', '/')
 
                     // var url = "/customer/" + data["customer_id"];

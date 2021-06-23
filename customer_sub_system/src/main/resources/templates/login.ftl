@@ -43,6 +43,7 @@
 
 
                     set_cookie('Authorization', data['token'], null, null, null, '/')
+                    window.location.replace('/customer')
                     // var url = "/customer/" + data["customer_id"];
                     // $(location).attr('href',url);
                 },

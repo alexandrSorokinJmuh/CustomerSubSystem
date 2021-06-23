@@ -3,12 +3,12 @@
 <@base.body "${title}">
     <form id="addForm" method="POST" action="/characteristic">
         <div class="form-control">
-            <label for="name" class="col-2">Enter name: </label>
-            <input type="text" class="col-2" name="name" id="name"/>
+            <label for="name">Enter name: </label>
+            <input type="text" name="name" id="name"/>
         </div>
         <div class="form-control">
-            <label for="description" class="col-2">Enter description: </label>
-            <input type="text" class="col-2" name="description" id="description"/>
+            <label for="description">Enter description: </label>
+            <input type="text" name="description" id="description"/>
         </div>
         <div class="d-flex flex-row">
             <input class="btn btn-success" type="submit" value="Create!"/>

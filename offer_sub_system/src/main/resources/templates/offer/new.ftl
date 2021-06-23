@@ -3,12 +3,12 @@
 <@base.body "${title}">
     <form id="addForm" method="POST" action="/offer">
         <div class="form-control">
-            <label for="name" class="col-2">Enter name: </label>
-            <input type="text" class="col-2" name="name" id="name"/>
+            <label for="name">Enter name: </label>
+            <input type="text" name="name" id="name"/>
         </div>
         <div class="form-control">
-            <label for="price" class="col-2">Enter price: </label>
-            <input type="number" class="col-2" placeholder="1.0" step="0.01" min="0" name="price" id="price"/>
+            <label for="price">Enter price: </label>
+            <input type="number" placeholder="1.0" step="0.01" min="0" name="price" id="price"/>
         </div>
         <div class="d-flex form-control">
             <input class="btn btn-success" type="submit" value="Create!"/>

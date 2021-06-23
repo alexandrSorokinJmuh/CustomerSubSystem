@@ -6,13 +6,12 @@ import com.example.order_sub_system.dto.OfferDto;
 import com.example.order_sub_system.dto.OrdersDto;
 import com.example.order_sub_system.entities.Orders;
 import com.example.order_sub_system.entities.Status;
-import com.example.order_sub_system.orders.OrderService;
+import com.example.order_sub_system.services.OrderService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -281,45 +280,6 @@ public class OrderRestController {
             return ResponseEntity.badRequest().build();
         }
 
-    }
-
-    @GetMapping("getToken")
-    public String getToken(HttpServletRequest request, String email, String password) {
-
-        if (email == null || email.isEmpty()) {
-            email = request.getParameter("email");
-        }
-        if (password == null || password.isEmpty()) {
-            password = request.getParameter("password");
-        }
-        System.out.println(request);
-        RestTemplate restTemplate = new RestTemplate();
-        String getTokenUrl = String.format("%s/api/auth/login", customerOriginAddress);
-
-        HttpHeaders headers = new HttpHeaders();
-        // set `content-type` header
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        // set `accept` header
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        Map<String, Object> tokenEntityMap = new HashMap<>();
-
-
-        tokenEntityMap.put("email", email);
-        tokenEntityMap.put("password", password);
-        System.out.println(email);
-        System.out.println(password);
-
-        // build the request
-        HttpEntity<Map<String, Object>> tokenEntity = new HttpEntity<>(tokenEntityMap, headers);
-
-        ResponseEntity<Object> response = restTemplate.postForEntity(getTokenUrl, tokenEntity, Object.class);
-        System.out.println(response.getBody());
-        System.out.println(response.getStatusCode());
-        if (response.getStatusCode() == HttpStatus.OK) {
-            return ((HashMap) response.getBody()).get("token").toString();
-
-        }
-        return "";
     }
 
 }

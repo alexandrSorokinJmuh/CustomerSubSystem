@@ -81,7 +81,7 @@
             });
         });
         $("#input_offer").autocomplete({
-            source: "getOfferByTerm",
+            source: "../getOfferByTerm",
             maxHeight: 400,
             maxWidth: $(this).width,
             minLength: 0,
@@ -92,7 +92,7 @@
             }
         })
         $("#input_customer").autocomplete({
-            source: "getCustomerByTerm",
+            source: "../getCustomerByTerm",
             maxHeight: 400,
             maxWidth: $(this).width,
             minLength: 0,

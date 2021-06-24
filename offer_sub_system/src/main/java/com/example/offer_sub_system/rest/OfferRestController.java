@@ -63,13 +63,13 @@ public class OfferRestController {
         // set `accept` header
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-        String token = request.getHeader(originAddress);
+        String token = request.getHeader(jwtHeader);
         if (token == null) {
             token = Arrays.stream(request.getCookies())
                     .filter(cookie -> cookie.getName().equals(jwtHeader))
                     .map(cookie -> cookie.getValue())
                     .findFirst()
-                    .orElse("");
+                    .orElse(null);
 
         }
 
@@ -130,9 +130,35 @@ public class OfferRestController {
     }
 
     @DeleteMapping("/{offer_id}")
-    public Offer deleteRest(@PathVariable("offer_id") int id) {
+    public Offer deleteRest(@PathVariable("offer_id") int id, HttpServletRequest request) {
         Offer offer = offerService.getById(id);
         offerService.delete(id);
+
+        String url = orderOriginAddress + "/order/offer/" + id;
+        // create headers
+        HttpHeaders headers = new HttpHeaders();
+        // set `content-type` header
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        // set `accept` header
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        String token = request.getHeader(jwtHeader);
+        if (token == null) {
+            token = Arrays.stream(request.getCookies())
+                    .filter(cookie -> cookie.getName().equals(jwtHeader))
+                    .map(cookie -> cookie.getValue())
+                    .findFirst()
+                    .orElse(null);
+
+        }
+
+        headers.set(jwtHeader, token);
+
+        // build the request
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(headers);
+
+        // send POST request
+        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.DELETE, entity, Void.class);
         return offer;
     }
 

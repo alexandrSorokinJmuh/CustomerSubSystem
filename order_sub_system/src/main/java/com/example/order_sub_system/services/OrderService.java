@@ -51,6 +51,14 @@ public class OrderService {
         return orderDao.create(order);
     }
 
+    public void deleteByCustomerId(int id){
+        orderDao.deleteByCustomerId(id);
+    }
+    public void deleteByOfferId(int id){
+        orderDao.deleteByOfferId(id);
+    }
+
+
     public Orders update(int id, Orders order) {
         return orderDao.update(id, order);
     }
@@ -289,5 +297,16 @@ public class OrderService {
                 customer.get("status").toString(),
                 customer.get("role").toString()
         );
+    }
+
+    public Orders createWithDto(OrdersDto ordersDto) {
+        Orders orders = new Orders();
+        orders.setCustomer_id(ordersDto.getCustomer_id());
+        orders.setStatus(Status.WAIT_FOR_PAID);
+        Boolean isPaid = false;
+        orders.setOffer_id(ordersDto.getOffer_id());
+        orders.setName(ordersDto.getName());
+
+        return orderDao.create(orders);
     }
 }

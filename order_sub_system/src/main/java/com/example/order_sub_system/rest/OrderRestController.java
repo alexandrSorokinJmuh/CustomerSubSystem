@@ -49,10 +49,9 @@ public class OrderRestController {
 
 
     @PostMapping("")
-    public Orders createRest(Orders orders) {
-        orders.setStatus(Status.WAIT_FOR_PAID);
-        orderService.create(orders);
-        return orders;
+    public Orders createRest(OrdersDto orders) {
+        Orders order = orderService.createWithDto(orders);
+        return order;
     }
 
 
@@ -131,11 +130,10 @@ public class OrderRestController {
         return null;
     }
 
-    @GetMapping("/{offer_id}/getOfferByTerm")
+    @GetMapping("/getOfferByTerm")
 
     public List<LabelAndValueDto> getOfferByTerm(
             HttpServletRequest request,
-            @PathVariable("offer_id") int id,
             @RequestParam(value = "term", required = false, defaultValue = "") String term) {
         List<OfferDto> offerDtoList = getOffers(request);
 
@@ -148,11 +146,10 @@ public class OrderRestController {
     }
 
 
-    @GetMapping("/{offer_id}/getCustomerByTerm")
+    @GetMapping("/getCustomerByTerm")
 
     public List<LabelAndValueDto> getCustomerByTerm(
             HttpServletRequest request,
-            @PathVariable("offer_id") int id,
             @RequestParam(value = "term", required = false, defaultValue = "") String term) {
         List<CustomerDto> customerDtoList = getCustomers(request);
 
@@ -192,6 +189,14 @@ public class OrderRestController {
         return order;
     }
 
+    @DeleteMapping("/customer/{customer_id}")
+    public void deleteByCustomerIdRest(@PathVariable("customer_id") int id) {
+        orderService.deleteByCustomerId(id);
+    }
+    @DeleteMapping("/offer/{offer_id}")
+    public void deleteByOfferIdRest(@PathVariable("offer_id") int id) {
+        orderService.deleteByOfferId(id);
+    }
     @GetMapping("/{order_id}/getCategoryAndPrice")
 
     public ResponseEntity<?> getCategoryAndPrice(
